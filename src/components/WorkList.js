@@ -1,14 +1,39 @@
 import React, { useState, useEffect } from 'react'
+import { Form } from 'antd'
 
 import {
   CustomModal as Modal,
   CustomTable as Table,
   CustomSteps as Steps,
 } from '../common'
-import { WorkDescription } from './steps/WorkDescription'
+import { WorkDescription, WorkInitiator, WorkStatus } from './steps'
 
 export const WorkList = () => {
   const [data, setData] = useState([])
+  const [form1] = Form.useForm()
+
+  const steps = [
+    {
+      title: 'Описание работ',
+      content: <WorkDescription form={form1} />,
+      form: form1,
+    },
+    {
+      title: 'Данные подрядчика',
+      content: <WorkInitiator />,
+      form: form1,
+    },
+    {
+      title: 'Статус работ',
+      content: <WorkStatus />,
+      form: form1,
+    },
+    {
+      title: 'Отправка данных',
+      content: 'Last-content',
+      form: form1,
+    },
+  ]
 
   return (
     <>
@@ -19,25 +44,6 @@ export const WorkList = () => {
     </>
   )
 }
-
-const steps = [
-  {
-    title: 'Описание работ',
-    content: <WorkDescription />,
-  },
-  {
-    title: 'Данные подрядчика',
-    content: 'Second-content',
-  },
-  {
-    title: 'Статус работ',
-    content: 'Third-content',
-  },
-  {
-    title: 'Отправка данных',
-    content: 'Last-content',
-  },
-]
 
 const columns = [
   {

@@ -30,6 +30,17 @@ export const CustomSteps = ({
     setCurrent((state) => state - 1)
   }
 
+  const validate = async (form) => {
+    try {
+      const data = await form.validateFields()
+      console.log(data)
+
+      next()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       <Steps current={current} size='small'>
@@ -40,7 +51,7 @@ export const CustomSteps = ({
       <div className='steps-content'>{steps[current].content}</div>
       <div className='steps-action'>
         {current < steps.length - 1 && (
-          <Button type='primary' onClick={() => next()}>
+          <Button type='primary' onClick={() => validate(steps[current].form)}>
             Далее
           </Button>
         )}
