@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import moment from 'moment'
 import {
   Upload,
   message,
@@ -40,23 +41,24 @@ export const WorkDescription = ({ form }) => {
   return (
     <Form name='work_description' form={form}>
       {renderSelects()}
-      <Form.Item name='input-address'>
+      <Form.Item name='input-address' rules={[{ required: true }]}>
         <Input placeholder='Адрес/Улица' />
       </Form.Item>
       {renderTextArea(form, 'textarea-area', 'Описание участка')}
-      <>
-        <Checkbox onChange={hanldeChangeOnOpen} /> <span>Перекрытие улиц</span>{' '}
-      </>
+      <Form.Item name={'on-close-check'} valuePropName='checked' noStyle>
+        <Checkbox onChange={hanldeChangeOnOpen}>Перекрытие улиц </Checkbox>
+      </Form.Item>
       {renderTextArea(
         form,
         'textarea-check-on-close',
         'Описание перекрытия',
         onOpen
       )}
-      <>
-        <Checkbox onChange={hanldeChangeOnClose} />{' '}
-        <span>Вскрытие дорожного полотна</span>
-      </>
+      <Form.Item name={'on-open-check'} valuePropName='checked' noStyle>
+        <Checkbox onChange={hanldeChangeOnClose}>
+          Вскрытие дорожного полотна{' '}
+        </Checkbox>
+      </Form.Item>
       {renderTextArea(
         form,
         'textarea-check-on-open',
@@ -108,6 +110,7 @@ const renderSelects = () => {
           name={i.name}
           rules={[{ required: true }]}
           key={`${i.name}${index}`}
+          hasFeedback
         >
           <Select placeholder={i.placeholder} style={{ width: 240 }} allowClear>
             {i.options.map((op) => (
@@ -124,7 +127,10 @@ const renderSelects = () => {
 
 const renderTextArea = (form, name, placeholder, disabled) => {
   return (
-    <Form.Item name={name}>
+    <Form.Item
+      name={name}
+      rules={[{ required: typeof disabled === 'undefined' && true }]}
+    >
       <TextArea
         style={{ height: 90 }}
         placeholder={placeholder}
@@ -138,21 +144,33 @@ const renderTextArea = (form, name, placeholder, disabled) => {
 
 const renderDatePicker = (form, picker, handleChange, name, text) => {
   return (
-    <Form.Item name={name}>
-      <span>{text}</span>{' '}
-      <DatePicker
-        placeholder='Выбрать дату'
-        format={picker ? 'YYYY' : 'DD-MM-YYYY'}
-        picker={picker}
-        onChange={(moment, string) => form.setFieldsValue({ [name]: string })}
-      />{' '}
-      <Checkbox onChange={handleChange} /> <span>Год</span>
+    <Form.Item label={text}>
+      <Input.Group compact>
+        <Form.Item
+          name={name}
+          rules={[{ required: true }]}
+          getValueFromEvent={(e, string) => moment(string, 'YYYY-MM-DD')}
+        >
+          <DatePicker
+            placeholder='Выбрать дату'
+            format={picker ? 'YYYY' : 'DD-MM-YYYY'}
+            picker={picker}
+          />
+        </Form.Item>
+        <Form.Item style={{ marginLeft: 10 }}>
+          <Checkbox onChange={handleChange}>Год</Checkbox>
+        </Form.Item>
+      </Input.Group>
     </Form.Item>
   )
 }
 
 const renderUpload = () => (
-  <Form.Item name='upload'>
+  <Form.Item
+    name='upload'
+    valuePropName='fileList'
+    getValueFromEvent={normFile}
+  >
     <Upload {...upload_props}>
       <Button icon={<UploadOutlined />}>Добавить рисунок / презентацию</Button>
     </Upload>
@@ -162,6 +180,7 @@ const renderUpload = () => (
 const upload_props = {
   name: 'file',
   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  listType: 'picture',
   headers: {
     authorization: 'authorization-text',
   },
@@ -175,4 +194,14 @@ const upload_props = {
       message.error(`Ошибка загрузки файла ${info.file.name}`)
     }
   },
+}
+
+const normFile = (e) => {
+  console.log('Upload event:', e)
+
+  if (Array.isArray(e)) {
+    return e
+  }
+
+  return e && e.fileList
 }

@@ -11,6 +11,9 @@ import { WorkDescription, WorkInitiator, WorkStatus } from './steps'
 export const WorkList = () => {
   const [data, setData] = useState([])
   const [form1] = Form.useForm()
+  const [form2] = Form.useForm()
+  const [form3] = Form.useForm()
+  const [form4] = Form.useForm()
 
   const steps = [
     {
@@ -20,18 +23,18 @@ export const WorkList = () => {
     },
     {
       title: 'Данные подрядчика',
-      content: <WorkInitiator />,
-      form: form1,
+      content: <WorkInitiator form={form2} />,
+      form: form2,
     },
     {
       title: 'Статус работ',
-      content: <WorkStatus />,
-      form: form1,
+      content: <WorkStatus form={form3} />,
+      form: form3,
     },
     {
       title: 'Отправка данных',
       content: 'Last-content',
-      form: form1,
+      form: form4,
     },
   ]
 
