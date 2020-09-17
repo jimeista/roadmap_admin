@@ -1,5 +1,5 @@
 import { WorkDescription } from './WorkDescription'
-import { WorkInitiator } from './WorkInitiator'
+import { WorkContractor } from './WorkContractor'
 import { WorkStatus } from './WorkStatus'
 
-export { WorkDescription, WorkInitiator, WorkStatus }
+export { WorkDescription, WorkContractor, WorkStatus }

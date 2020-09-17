@@ -4,13 +4,13 @@ import { Input, Checkbox, Form } from 'antd'
 
 const { TextArea } = Input
 
-export const WorkStatus = ({ form }) => {
+export const WorkStatus = () => {
   const [disabled, setDisabled] = useState(true)
   const hanldeChange = (e) =>
     e.target.checked ? setDisabled(false) : setDisabled(true)
 
   return (
-    <Form form={form}>
+    <>
       <Form.Item name='input-status' rules={[{ required: true }]}>
         <Input placeholder='Статус исполнения (%)' />
       </Form.Item>
@@ -32,6 +32,6 @@ export const WorkStatus = ({ form }) => {
           disabled={disabled}
         />
       </Form.Item>
-    </Form>
+    </>
   )
 }

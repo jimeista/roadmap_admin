@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { CustomModal as Modal, CustomTable as Table } from '../common'
 

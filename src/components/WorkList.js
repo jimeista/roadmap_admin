@@ -1,47 +1,41 @@
-import React, { useState, useEffect } from 'react'
-import { Form } from 'antd'
+import React, { useState } from 'react'
 
 import {
   CustomModal as Modal,
   CustomTable as Table,
   CustomSteps as Steps,
 } from '../common'
-import { WorkDescription, WorkInitiator, WorkStatus } from './steps'
+import { WorkDescription, WorkContractor, WorkStatus } from './steps'
 
 export const WorkList = () => {
   const [data, setData] = useState([])
-  const [form1] = Form.useForm()
-  const [form2] = Form.useForm()
-  const [form3] = Form.useForm()
-  const [form4] = Form.useForm()
 
   const steps = [
     {
       title: 'Описание работ',
-      content: <WorkDescription form={form1} />,
-      form: form1,
+      content: <WorkDescription />,
     },
     {
       title: 'Данные подрядчика',
-      content: <WorkInitiator form={form2} />,
-      form: form2,
+      content: <WorkContractor />,
     },
     {
       title: 'Статус работ',
-      content: <WorkStatus form={form3} />,
-      form: form3,
+      content: <WorkStatus />,
     },
     {
       title: 'Отправка данных',
       content: 'Last-content',
-      form: form4,
     },
   ]
 
   return (
     <>
       <Modal btntext='Добавить' title='Форма ввода данных по ремонтным работам'>
-        <Steps steps={steps} />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Steps steps={steps} />
+          <div style={{ width: '100%' }} />
+        </div>
       </Modal>
       <Table columns={columns} data={data} setData={setData} />
     </>

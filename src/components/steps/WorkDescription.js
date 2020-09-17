@@ -16,7 +16,7 @@ import { UploadOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 const { Option } = Select
 
-export const WorkDescription = ({ form }) => {
+export const WorkDescription = () => {
   //disabling textareas
   const [onOpen, setOnOpen] = useState(true)
   const [onClose, setOnClose] = useState(true)
@@ -39,65 +39,53 @@ export const WorkDescription = ({ form }) => {
     e.target.checked ? setPickerEnd('year') : setPickerEnd()
 
   return (
-    <Form name='work_description' form={form}>
+    <>
       {renderSelects()}
-      <Form.Item name='input-address' rules={[{ required: true }]}>
+      <Form.Item name='address' rules={[{ required: true }]}>
         <Input placeholder='Адрес/Улица' />
       </Form.Item>
-      {renderTextArea(form, 'textarea-area', 'Описание участка')}
-      <Form.Item name={'on-close-check'} valuePropName='checked' noStyle>
+      {renderTextArea('area', 'Описание участка')}
+      <Form.Item name={'is-closured'} valuePropName='checked' noStyle>
         <Checkbox onChange={hanldeChangeOnOpen}>Перекрытие улиц </Checkbox>
       </Form.Item>
-      {renderTextArea(
-        form,
-        'textarea-check-on-close',
-        'Описание перекрытия',
-        onOpen
-      )}
-      <Form.Item name={'on-open-check'} valuePropName='checked' noStyle>
+      {renderTextArea('closure-descr', 'Описание перекрытия', onOpen)}
+      <Form.Item name={'is-canvas-opened'} valuePropName='checked' noStyle>
         <Checkbox onChange={hanldeChangeOnClose}>
           Вскрытие дорожного полотна{' '}
         </Checkbox>
       </Form.Item>
-      {renderTextArea(
-        form,
-        'textarea-check-on-open',
-        'Описание вскрытия',
-        onClose
-      )}
+      {renderTextArea('canvas-descr', 'Описание вскрытия', onClose)}
       {renderDatePicker(
-        form,
         pickerStart,
         handleChangeYearStart,
-        'picker-start',
+        'start-date',
         'Дата начала'
       )}
       {renderDatePicker(
-        form,
         pickerEnd,
         handleChangeYearEnd,
-        'picker-end',
+        'end-date',
         'Дата окончания'
       )}
       {renderUpload()}
-    </Form>
+    </>
   )
 }
 
 const renderSelects = () => {
   const arr = [
     {
-      name: 'select-category',
+      name: 'category',
       placeholder: 'Категоря работ',
       options: ['option 1', 'option 2'],
     },
     {
-      name: 'select_organization',
+      name: 'organisation',
       placeholder: 'Ответсвенный орган',
       options: ['option 1', 'option 2', 'option 3'],
     },
     {
-      name: 'select_district',
+      name: 'region',
       placeholder: 'Район',
       options: ['option 1', 'option 2'],
     },
@@ -125,7 +113,7 @@ const renderSelects = () => {
   )
 }
 
-const renderTextArea = (form, name, placeholder, disabled) => {
+const renderTextArea = (name, placeholder, disabled) => {
   return (
     <Form.Item
       name={name}
@@ -136,13 +124,12 @@ const renderTextArea = (form, name, placeholder, disabled) => {
         placeholder={placeholder}
         allowClear
         disabled={disabled}
-        onChange={(e) => form.setFieldsValue({ [name]: e.target.value })}
       />
     </Form.Item>
   )
 }
 
-const renderDatePicker = (form, picker, handleChange, name, text) => {
+const renderDatePicker = (picker, handleChange, name, text) => {
   return (
     <Form.Item label={text}>
       <Input.Group compact>
@@ -153,7 +140,7 @@ const renderDatePicker = (form, picker, handleChange, name, text) => {
         >
           <DatePicker
             placeholder='Выбрать дату'
-            format={picker ? 'YYYY' : 'DD-MM-YYYY'}
+            format={picker ? 'YYYY' : 'YYYY-MM-DD'}
             picker={picker}
           />
         </Form.Item>
@@ -167,7 +154,7 @@ const renderDatePicker = (form, picker, handleChange, name, text) => {
 
 const renderUpload = () => (
   <Form.Item
-    name='upload'
+    name='file-paths'
     valuePropName='fileList'
     getValueFromEvent={normFile}
   >

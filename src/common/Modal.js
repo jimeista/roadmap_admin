@@ -1,36 +1,28 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Modal, Button } from 'antd'
 
 export const CustomModal = (props) => {
-  const [visible, setVisible] = useState(false)
-
-  const showModal = () => {
-    setVisible(true)
-  }
-
-  const handleOk = (e) => {
-    setVisible(false)
-  }
-
-  const handleCancel = (e) => {
-    setVisible(false)
-  }
-
+  const { confirm } = Modal
   const { btntext, btnstyle, title, children } = props
+
+  const showConfirm = () => {
+    confirm({
+      title: title || 'Modal',
+      content: children,
+      width: '80%',
+      okText: 'Отправить',
+      cancelText: 'Отменить',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 2000)
+        }).catch(() => console.log('Oops errors!'))
+      },
+    })
+  }
+
   return (
-    <>
-      <Button type='primary' onClick={showModal} style={btnstyle || {}}>
-        {btntext || 'Open'}
-      </Button>
-      <Modal
-        title={title || 'Modal'}
-        width='50%'
-        visible={visible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        {children}
-      </Modal>
-    </>
+    <Button type='primary' onClick={showConfirm} style={btnstyle || {}}>
+      {btntext || 'Open'}
+    </Button>
   )
 }

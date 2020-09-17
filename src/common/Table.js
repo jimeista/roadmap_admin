@@ -142,11 +142,3 @@ export const CustomTable = (props) => {
     </Form>
   )
 }
-
-const colss = [
-  {
-    title: 'Title',
-    dataIndex: 'title',
-    key: 'title',
-  },
-]
