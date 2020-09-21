@@ -83,11 +83,11 @@ export const CustomTable = (props) => {
       if (index > -1) {
         const item = newData[index]
         newData.splice(index, 1, { ...item, ...row })
-        props.setData(newData)
+        props.setDataSource(newData)
         setEditingKey('')
       } else {
         newData.push(row)
-        props.setData(newData)
+        props.setDataSource(newData)
         setEditingKey('')
       }
     } catch (errInfo) {
@@ -98,7 +98,7 @@ export const CustomTable = (props) => {
   const handleDelete = async (record) => {
     try {
       let newData = [...props.data]
-      props.setData(newData.filter((item) => item.key !== record.key))
+      props.setDataSource(newData.filter((item) => item.key !== record.key))
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo)
     }
@@ -132,12 +132,13 @@ export const CustomTable = (props) => {
           },
         }}
         bordered
-        dataSource={props.data}
+        dataSource={props.dataSource}
         columns={mergedColumns}
         rowClassName='editable-row'
         pagination={{
           onChange: cancel,
         }}
+        loading={props.loading}
       />
     </Form>
   )

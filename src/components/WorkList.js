@@ -1,19 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Table } from 'antd'
 
-import {
-  CustomModal as Modal,
-  CustomTable as Table,
-  CustomSteps as Steps,
-} from '../common'
+import { CustomModal as Modal, CustomSteps as Steps } from '../common'
 import { WorkDescription, WorkContractor, WorkStatus } from './steps'
 
 export const WorkList = () => {
-  const [data, setData] = useState([])
+  const { organisations, regions, categories, status, data } = useSelector(
+    (state) => state.roadmap
+  )
 
   const steps = [
     {
       title: 'Описание работ',
-      content: <WorkDescription />,
+      content: (
+        <WorkDescription
+          organisations={organisations}
+          regions={regions}
+          categories={categories}
+        />
+      ),
     },
     {
       title: 'Данные подрядчика',
@@ -37,7 +43,11 @@ export const WorkList = () => {
           <div style={{ width: '100%' }} />
         </div>
       </Modal>
-      <Table columns={columns} data={data} setData={setData} />
+      <Table
+        columns={columns}
+        dataSource={dataSourceHelper(data)}
+        loading={status === 'loading' ? true : false}
+      />
     </>
   )
 }
@@ -50,37 +60,49 @@ const columns = [
   },
   {
     title: 'Улица',
-    dataIndex: 'Улица',
-    key: 'Улица',
+    dataIndex: 'address',
+    key: 'address',
   },
   {
     title: 'Участок',
-    dataIndex: 'Участок',
-    key: 'Участок',
+    dataIndex: 'region',
+    key: 'region',
   },
   {
     title: 'Категория работ',
-    dataIndex: 'Категория работ',
-    key: 'Категория работ',
+    dataIndex: 'category',
+    key: 'category',
   },
   {
     title: 'Отв орган',
-    dataIndex: 'Отв орган',
-    key: 'Отв орган',
+    dataIndex: 'organisation',
+    key: 'organisation',
   },
   {
     title: 'Дата начала',
-    dataIndex: 'Дата начала',
-    key: 'Дата начала',
+    dataIndex: 'start-date',
+    key: 'start-date',
   },
   {
-    title: 'Дата начала',
-    dataIndex: 'Дата начала',
-    key: 'Дата начала',
+    title: 'Дата окончания',
+    dataIndex: 'end-date',
+    key: 'end-date',
   },
   {
     title: 'Статус (%)',
-    dataIndex: 'Статус',
-    key: 'Статус',
+    dataIndex: 'status-percentage',
+    key: 'status-percentage',
   },
 ]
+
+const dataSourceHelper = (arr) => {
+  const dataSource = arr.map((i, index) => {
+    let keys = { '№': index + 1, key: index + 1 }
+    Object.keys(i).map((key) => {
+      keys = { ...keys, [key]: i[key] }
+    })
+    return keys
+  })
+
+  return dataSource
+}

@@ -7,7 +7,7 @@ export const CustomTabs = ({ tabs }) => {
 
   const renderTabs = () => {
     return tabs ? (
-      <Tabs type='card'>
+      <Tabs type='card' className='tabs'>
         {tabs.map((i, index) => (
           <TabPane tab={i.title} key={index}>
             {i.child}

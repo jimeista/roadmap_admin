@@ -16,6 +16,9 @@
 }
 
 /* tabs */
+.tabs {
+  height: 100vh;
+}
 
 .card-container p {
   margin: 0;

@@ -4,22 +4,7 @@ import { Steps, Button, Form } from 'antd'
 
 const { Step } = Steps
 
-export const CustomSteps = ({
-  steps = [
-    {
-      title: 'First',
-      content: 'First-content',
-    },
-    {
-      title: 'Second',
-      content: 'Second-content',
-    },
-    {
-      title: 'Last',
-      content: 'Last-content',
-    },
-  ],
-}) => {
+export const CustomSteps = ({ steps }) => {
   const [current, setCurrent] = useState(0)
   const [form] = Form.useForm()
 
@@ -43,7 +28,7 @@ export const CustomSteps = ({
   }
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <Steps current={current} size='small'>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />

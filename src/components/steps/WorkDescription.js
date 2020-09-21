@@ -16,7 +16,8 @@ import { UploadOutlined } from '@ant-design/icons'
 const { TextArea } = Input
 const { Option } = Select
 
-export const WorkDescription = () => {
+export const WorkDescription = ({ organisations, regions, categories }) => {
+
   //disabling textareas
   const [onOpen, setOnOpen] = useState(true)
   const [onClose, setOnClose] = useState(true)
@@ -40,7 +41,7 @@ export const WorkDescription = () => {
 
   return (
     <>
-      {renderSelects()}
+      {renderSelects({ regions, organisations, categories })}
       <Form.Item name='address' rules={[{ required: true }]}>
         <Input placeholder='Адрес/Улица' />
       </Form.Item>
@@ -72,22 +73,30 @@ export const WorkDescription = () => {
   )
 }
 
-const renderSelects = () => {
+const renderSelects = (prop) => {
+  const { regions, organisations, categories } = prop
   const arr = [
     {
       name: 'category',
       placeholder: 'Категоря работ',
-      options: ['option 1', 'option 2'],
+      options:
+        categories.status === 'success'
+          ? categories.data.map((r) => r.name)
+          : [],
     },
     {
       name: 'organisation',
       placeholder: 'Ответсвенный орган',
-      options: ['option 1', 'option 2', 'option 3'],
+      options:
+        organisations.status === 'success'
+          ? organisations.data.map((o) => o.name)
+          : [],
     },
     {
       name: 'region',
       placeholder: 'Район',
-      options: ['option 1', 'option 2'],
+      options:
+        regions.status === 'success' ? regions.data.map((r) => r.name) : [],
     },
   ]
 

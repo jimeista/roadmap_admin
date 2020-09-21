@@ -1,4 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import {
+  fecthOrganizations,
+  fecthRegions,
+  fetchCategories,
+  fetchRoadMap,
+} from '../features/roadmap/roadmapSlice'
 
 import { CustomTabs as Tabs } from '../common'
 
@@ -6,11 +13,16 @@ import { WorkList } from './WorkList'
 import { CrossList } from './CrossList'
 
 export const RoadMap = () => {
-  return (
-    <>
-      <Tabs tabs={tabs} />
-    </>
-  )
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fecthOrganizations())
+    dispatch(fecthRegions())
+    dispatch(fetchCategories())
+    dispatch(fetchRoadMap())
+  }, [dispatch])
+
+  return <Tabs tabs={tabs} />
 }
 
 const tabs = [
