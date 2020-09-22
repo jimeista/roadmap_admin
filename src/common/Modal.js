@@ -6,7 +6,7 @@ export const CustomModal = (props) => {
   const [visible, setVisible] = useState(false)
 
   const handleOk = () => {
-    console.log(formData)
+    // console.log(formData)
     setVisible(false)
   }
   const handleCancel = () => setVisible(false)

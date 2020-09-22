@@ -1,22 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 import { Input, Form } from 'antd'
 
 // const { TextArea } = Input
 
 export const WorkContractor = () => {
+  const [phone, setPhone] = useState()
   return (
     <>
-      <Form.Item name='name' rules={[{ required: true }]}>
+      <Form.Item name='name'>
         <Input placeholder='Наименование компании' />
       </Form.Item>
-      <Form.Item name='supervisor-name' rules={[{ required: true }]}>
+      <Form.Item
+        name='supervisor-name'
+        rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
+      >
         <Input placeholder='ФИО руководителя' />
       </Form.Item>
-      <Form.Item name='contacts' rules={[{ required: true }]}>
-        <Input placeholder='№ телефона' />
+      <Form.Item name='contacts'>
+        <PhoneInput
+          country={'kz'}
+          value={phone}
+          onChange={(phone) => setPhone({ phone })}
+        />
       </Form.Item>
-      <Form.Item name='warranty-period' rules={[{ required: true }]}>
+
+      <Form.Item name='warranty-period'>
         <Input placeholder='Гарантийный период' />
       </Form.Item>
       {/* <Form.Item

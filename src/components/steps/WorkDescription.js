@@ -103,7 +103,7 @@ const renderSelects = (prop) => {
       {arr.map((i, index) => (
         <Form.Item
           name={i.name}
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
           key={`${i.name}${index}`}
           hasFeedback
         >
@@ -126,7 +126,8 @@ const renderTextArea = (name, placeholder, disabled) => {
       name={name}
       rules={[
         {
-          required: typeof disabled === 'undefined' && name !== 'area' && true,
+          required: disabled === false && name !== 'area' && true,
+          message: 'Необходимо заполнить поле!',
         },
       ]}
     >
@@ -146,7 +147,7 @@ const renderDatePicker = (picker, handleChange, name, text) => {
       <Input.Group compact>
         <Form.Item
           name={name}
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
           getValueFromEvent={(e, string) => moment(string, 'YYYY-MM-DD')}
         >
           <DatePicker

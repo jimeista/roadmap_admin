@@ -11,16 +11,20 @@ export const WorkStatus = () => {
 
   return (
     <>
-      <Form.Item name='status-percentage"' rules={[{ required: true }]}>
+      <Form.Item
+        name='status-percentage'
+        rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
+        label={'Статус исполнения (%)'}
+      >
         <InputNumber
-          placeholder='Статус исполнения (%)'
+          style={{ width: '120px' }}
           min={0}
           max={100}
           formatter={(value) => `${value}%`}
           parser={(value) => value.replace('%', '')}
         />
       </Form.Item>
-      <Form.Item name='textarea-comment1' rules={[{ required: true }]}>
+      <Form.Item name='textarea-comment1'>
         <TextArea style={{ height: 90 }} placeholder='Комментарий' />
       </Form.Item>
       <Form.Item name='hide-work-on-map' valuePropName='checked'>

@@ -8,7 +8,12 @@ import {
   CustomSteps as Steps,
   CustomTable as Table,
 } from '../common'
-import { WorkDescription, WorkContractor, WorkStatus } from './steps'
+import {
+  WorkDescription,
+  WorkContractor,
+  WorkStatus,
+  WorkConfirm,
+} from './steps'
 
 export const WorkList = () => {
   const dispatch = useDispatch()
@@ -43,7 +48,7 @@ export const WorkList = () => {
     },
     {
       title: 'Отправка данных',
-      content: 'Last-content',
+      content: <WorkConfirm formData={formData} />,
     },
   ]
 
