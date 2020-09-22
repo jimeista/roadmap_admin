@@ -1,30 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Modal, Button } from 'antd'
 
 export const CustomModal = (props) => {
-  const { confirm } = Modal
-  const { btntext, btnstyle, title, children } = props
+  const { btntext, btnstyle, title, children, formData, current } = props
+  const [visible, setVisible] = useState(false)
 
-  const config = {
-    title: title || 'Modal',
-    content: children,
-    width: '80%',
-    okText: 'Отправить',
-    cancelText: 'Отменить',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 2000)
-      }).catch(() => console.log('Oops errors!'))
-    },
+  const handleOk = () => {
+    console.log(formData)
+    setVisible(false)
   }
+  const handleCancel = () => setVisible(false)
 
   return (
-    <Button
-      type='primary'
-      onClick={() => confirm(config)}
-      style={btnstyle || {}}
-    >
-      {btntext || 'Open'}
-    </Button>
+    <>
+      <Button
+        type='primary'
+        onClick={() => setVisible(true)}
+        style={btnstyle || {}}
+      >
+        {btntext || 'Open'}
+      </Button>
+      <Modal
+        title={title || 'Modal'}
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        content={children}
+        width={'80%'}
+        footer={[
+          <Button key='back' onClick={handleCancel}>
+            Отменить
+          </Button>,
+          <Button
+            key='submit'
+            type='primary'
+            onClick={handleOk}
+            disabled={current !== 3 ? true : false}
+          >
+            Отправить
+          </Button>,
+        ]}
+      >
+        {children}
+      </Modal>
+    </>
   )
 }

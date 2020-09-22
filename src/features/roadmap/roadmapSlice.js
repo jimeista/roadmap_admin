@@ -38,6 +38,14 @@ export const fetchRoadMap = createAsyncThunk(
   }
 )
 
+export const postRoadMap = createAsyncThunk(
+  'roadmap/post',
+  async (initialPost) => {
+    const res = await axios.post(BASE_ROADMAP_URL, initialPost)
+    return res.post
+  }
+)
+
 export const roadmapSlice = createSlice({
   name: 'roadmap',
   initialState: {
@@ -59,8 +67,18 @@ export const roadmapSlice = createSlice({
     data: [],
     status: 'idle',
     error: null,
+    formData: {},
+    current: 0,
   },
-  reducers: {},
+  reducers: {
+    formValidate: (state, action) => {
+      // console.log(action.payload)
+      state.formData = { ...state.formData, ...action.payload }
+    },
+    setCurrent: (state, action) => {
+      state.current = action.payload
+    },
+  },
   extraReducers: {
     [fecthOrganizations.fulfilled]: (state, action) => {
       state.organisations.status = 'success'
@@ -106,10 +124,13 @@ export const roadmapSlice = createSlice({
       state.status = 'failed'
       state.error = action.payload
     },
+    [postRoadMap.success]: (state, action) => {
+      state.data.push(action.payload)
+    },
   },
 })
 
-export const { getOrganization } = roadmapSlice.actions
+export const { formValidate, setCurrent } = roadmapSlice.actions
 
 export const selectRoadMap = (state) => state.roadmap
 

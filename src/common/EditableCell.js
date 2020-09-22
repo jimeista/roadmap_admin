@@ -1,5 +1,6 @@
 import React from 'react'
-import { Input, Form, Select, Tag } from 'antd'
+import { Input, Form, Select, InputNumber, DatePicker } from 'antd'
+import moment from 'moment'
 
 export const EditableCell = ({
   editing,
@@ -11,6 +12,7 @@ export const EditableCell = ({
   record,
   index,
   children,
+  required,
   ...restProps
 }) => {
   const { Option } = Select
@@ -27,27 +29,23 @@ export const EditableCell = ({
             ))}
           </Select>
         )
-      case 'multi-select':
-        function tagRender(props) {
-          const { label, closable, onClose } = props
-
-          return (
-            <Tag
-              closable={closable}
-              onClose={onClose}
-              style={{ marginRight: 3 }}
-            >
-              {label}
-            </Tag>
-          )
-        }
+      case 'number':
         return (
-          <Select
-            placeholder='Модули'
-            mode='multiple'
-            tagRender={tagRender}
-            style={{ width: '100%', marginBottom: 15 }}
-            options={data}
+          <InputNumber
+            min={0}
+            max={100}
+            formatter={(value) => `${value}%`}
+            parser={(value) => value.replace('%', '')}
+          />
+        )
+      case 'picker':
+        return (
+          <DatePicker
+            placeholder='Выбрать дату'
+            format='YYYY/MM/DD'
+            value={moment('2020/01/01', 'YYYY/MM/DD')}
+            // format={picker ? 'YYYY' : 'YYYY-MM-DD'}
+            // picker={picker}
           />
         )
       default:
@@ -67,7 +65,7 @@ export const EditableCell = ({
           }}
           rules={[
             {
-              required: true,
+              required,
               message: `Введите ${title}!`,
             },
           ]}

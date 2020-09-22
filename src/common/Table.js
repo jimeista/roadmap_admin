@@ -24,7 +24,7 @@ export const CustomTable = (props) => {
         return editable ? (
           <span>
             <a
-              onClick={() => save(record.key)}
+              onClick={() => save(record)}
               style={{
                 marginRight: 8,
               }}
@@ -74,34 +74,39 @@ export const CustomTable = (props) => {
     setEditingKey('')
   }
 
-  const save = async (key) => {
+  const save = async (record) => {
     try {
       const row = await form.validateFields()
-      const newData = [...props.data]
-      const index = newData.findIndex((item) => key === item.key)
+      console.log(row, record)
+      setEditingKey('')
 
-      if (index > -1) {
-        const item = newData[index]
-        newData.splice(index, 1, { ...item, ...row })
-        props.setDataSource(newData)
-        setEditingKey('')
-      } else {
-        newData.push(row)
-        props.setDataSource(newData)
-        setEditingKey('')
-      }
+      const ob = { ...record, ...row }
+      console.log(ob)
+
+      // const newData = [...props.dataSource]
+      // const index = newData.findIndex((item) => key === item.key)
+      // if (index > -1) {
+      //   const item = newData[index]
+      //   newData.splice(index, 1, { ...item, ...row })
+      //   props.setDataSource(newData)
+      //   setEditingKey('')
+      // } else {
+      //   newData.push(row)
+      //   props.setDataSource(newData)
+      //   setEditingKey('')
+      // }
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo)
     }
   }
 
   const handleDelete = async (record) => {
-    try {
-      let newData = [...props.data]
-      props.setDataSource(newData.filter((item) => item.key !== record.key))
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo)
-    }
+    // try {
+    //   let newData = [...props.data]
+    //   props.setDataSource(newData.filter((item) => item.key !== record.key))
+    // } catch (errInfo) {
+    //   console.log('Validate Failed:', errInfo)
+    // }
   }
 
   const mergedColumns = arr.map((col) => {
@@ -118,6 +123,7 @@ export const CustomTable = (props) => {
         title: col.title,
         data: col.data,
         placeholder: col.placeholder,
+        required: col.rule,
         editing: isEditing(record),
       }),
     }

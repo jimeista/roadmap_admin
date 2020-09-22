@@ -4,22 +4,30 @@ import { Steps, Button, Form } from 'antd'
 
 const { Step } = Steps
 
-export const CustomSteps = ({ steps }) => {
-  const [current, setCurrent] = useState(0)
+export const CustomSteps = ({ steps, dispatch, setCurrent, formValidate }) => {
   const [form] = Form.useForm()
 
+  const [current, setCurrentt] = useState(0)
+
   const next = () => {
-    setCurrent((state) => state + 1)
+    setCurrentt((state) => state + 1)
+    dispatch(setCurrent(current + 1))
   }
 
   const prev = () => {
-    setCurrent((state) => state - 1)
+    setCurrentt((state) => state - 1)
+    dispatch(setCurrent(current - 1))
   }
 
   const validate = async () => {
     try {
       const data = await form.validateFields()
-      console.log(data)
+      Object.keys(data).map((key) => {
+        if (typeof data[key] === 'object') {
+          data[key] = data[key]['_i']
+        }
+      })
+      dispatch(formValidate(data))
 
       next()
     } catch (err) {

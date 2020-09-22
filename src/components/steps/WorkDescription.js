@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import moment from 'moment'
 import {
   Upload,
@@ -17,7 +16,6 @@ const { TextArea } = Input
 const { Option } = Select
 
 export const WorkDescription = ({ organisations, regions, categories }) => {
-
   //disabling textareas
   const [onOpen, setOnOpen] = useState(true)
   const [onClose, setOnClose] = useState(true)
@@ -42,7 +40,7 @@ export const WorkDescription = ({ organisations, regions, categories }) => {
   return (
     <>
       {renderSelects({ regions, organisations, categories })}
-      <Form.Item name='address' rules={[{ required: true }]}>
+      <Form.Item name='address'>
         <Input placeholder='Адрес/Улица' />
       </Form.Item>
       {renderTextArea('area', 'Описание участка')}
@@ -126,7 +124,11 @@ const renderTextArea = (name, placeholder, disabled) => {
   return (
     <Form.Item
       name={name}
-      rules={[{ required: typeof disabled === 'undefined' && true }]}
+      rules={[
+        {
+          required: typeof disabled === 'undefined' && name !== 'area' && true,
+        },
+      ]}
     >
       <TextArea
         style={{ height: 90 }}

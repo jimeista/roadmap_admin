@@ -16,15 +16,11 @@
 }
 
 /* tabs */
-.tabs {
-  height: 100vh;
-}
 
 .card-container p {
   margin: 0;
 }
 .card-container > .ant-tabs-card .ant-tabs-content {
-  height: 120px;
   margin-top: -16px;
 }
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
