@@ -6,7 +6,7 @@ import { WorkDetailsModal } from './WorkDetailsModal'
 import { CustomTable as Table } from '../../common'
 import {
   setWorkListTableColumnsHelper,
-  setDataSourceHelper,
+  setWorkListDataSourceHelper,
 } from '../../utils/helper'
 
 export const WorkListTable = () => {
@@ -32,7 +32,7 @@ export const WorkListTable = () => {
       <Form.Item name='table'>
         <Table
           columns={columns}
-          dataSource={setDataSourceHelper(data)}
+          dataSource={setWorkListDataSourceHelper(data)}
           loading={status === 'loading' ? true : false}
         />
       </Form.Item>

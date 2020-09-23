@@ -14,7 +14,7 @@ export const WorkDetailsModal = (props) => {
       visible={visible}
       onOk={() => setVisible(false)}
       onCancel={() => setVisible(false)}
-      width={'80%'}
+      width={'50%'}
     >
       <WorkConfirm ob={record} />
     </Modal>

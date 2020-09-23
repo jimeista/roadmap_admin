@@ -1,11 +1,16 @@
 import React from 'react'
 
-export const setDataSourceHelper = (arr) => {
+export const setWorkListDataSourceHelper = (arr) => {
   const dataSource = arr.map((i, index) => {
     let keys = { '№': index + 1, key: index + 1 }
     Object.keys(i).map((key) => {
-      keys = { ...keys, [key]: i[key] }
+      if (key === 'status') {
+        Object.keys(i[key]).map((k) => (keys = { ...keys, [k]: i[key][k] }))
+      } else {
+        keys = { ...keys, [key]: i[key] }
+      }
     })
+    console.log(keys)
     return keys
   })
 
@@ -105,8 +110,8 @@ export const setWorkListTableColumnsHelper = (
   },
   {
     title: 'Статус (%)',
-    dataIndex: 'status-percentage',
-    key: 'status-percentage',
+    dataIndex: 'percentage',
+    key: 'percentage',
     editable: true,
     width: '5%',
     rule: true,

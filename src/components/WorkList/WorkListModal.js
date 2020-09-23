@@ -48,14 +48,19 @@ export const WorkListModal = () => {
           </Button>,
         ]}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Steps
             steps={steps}
             setCurrent={setCurrent}
             formValidate={formValidate}
             dispatch={dispatch}
           />
-          <div style={{ width: '100%' }}>
+          <div style={{ width: '100%', paddingLeft: 10 }}>
             <YandexMap />
           </div>
         </div>
