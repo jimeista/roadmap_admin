@@ -12,7 +12,7 @@ export const WorkStatus = () => {
   return (
     <>
       <Form.Item
-        name='status-percentage'
+        name='percentage'
         rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
         label={'Статус исполнения (%)'}
       >
@@ -24,18 +24,18 @@ export const WorkStatus = () => {
           parser={(value) => value.replace('%', '')}
         />
       </Form.Item>
-      <Form.Item name='textarea-comment1'>
+      <Form.Item name='percentage-comment'>
         <TextArea style={{ height: 90 }} placeholder='Комментарий' />
       </Form.Item>
-      <Form.Item name='hide-work-on-map' valuePropName='checked'>
+      <Form.Item name='is-hidden' valuePropName='checked'>
         <Checkbox> Скрыть работу с карты</Checkbox>
       </Form.Item>
-      <Form.Item name='denied' valuePropName='checked' noStyle>
+      <Form.Item name='is-canceled' valuePropName='checked' noStyle>
         <Checkbox onChange={hanldeChange}>
           Закуп работ отменен / приостановлен
         </Checkbox>
       </Form.Item>
-      <Form.Item name='textarea-comment2'>
+      <Form.Item name='canceled-comment'>
         <TextArea
           style={{ height: 90 }}
           placeholder='Комментарий'

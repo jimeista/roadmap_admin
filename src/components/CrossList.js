@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 
-import { CustomModal as Modal, CustomTable as Table } from '../common'
+import { CustomTable as Table } from '../common'
 
 export const CrossList = () => {
   const [data, setData] = useState([])
 
   return (
     <>
-      <Modal btntext='Добавить' />
       <Table columns={columns} data={data} setData={setData} />
     </>
   )

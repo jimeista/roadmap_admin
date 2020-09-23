@@ -10,13 +10,13 @@ export const WorkContractor = () => {
   const [phone, setPhone] = useState()
   return (
     <>
-      <Form.Item name='name'>
+      <Form.Item name='lot-name'>
+        <Input placeholder='Наименование проекта (№ лота)' />
+      </Form.Item>
+      <Form.Item name='company-name'>
         <Input placeholder='Наименование компании' />
       </Form.Item>
-      <Form.Item
-        name='supervisor-name'
-        rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
-      >
+      <Form.Item name='supervisor-name'>
         <Input placeholder='ФИО руководителя' />
       </Form.Item>
       <Form.Item name='contacts'>
