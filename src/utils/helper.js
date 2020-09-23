@@ -1,22 +1,5 @@
 import React from 'react'
 
-export const setWorkListDataSourceHelper = (arr) => {
-  const dataSource = arr.map((i, index) => {
-    let keys = { '№': index + 1, key: index + 1 }
-    Object.keys(i).map((key) => {
-      if (key === 'status') {
-        Object.keys(i[key]).map((k) => (keys = { ...keys, [k]: i[key][k] }))
-      } else {
-        keys = { ...keys, [key]: i[key] }
-      }
-    })
-    console.log(keys)
-    return keys
-  })
-
-  return dataSource
-}
-
 export const setFilterSelectsHelper = (response) => {
   let ob = {}
   let result = []
@@ -30,6 +13,34 @@ export const setFilterSelectsHelper = (response) => {
   return result
 }
 
+export const setWorkListDataSourceHelper = (arr) => {
+  const dataSource = arr.map((i, index) => {
+    let keys = { '№': index + 1, key: index + 1 }
+    Object.keys(i).map((key) => {
+      if (key === 'status') {
+        Object.keys(i[key]).map((k) => (keys = { ...keys, [k]: i[key][k] }))
+      } else {
+        keys = { ...keys, [key]: i[key] }
+      }
+    })
+    return keys
+  })
+
+  return dataSource
+}
+
+export const setCrossListDataSourceHelper = (arr) => {
+  const dataSource = arr.map((i, index) => {
+    let keys = { '№': index + 1, key: index + 1 }
+    Object.keys(i).map((key) => {
+      keys = { ...keys, [key]: i[key] }
+    })
+    return keys
+  })
+
+  return dataSource
+}
+
 export const setWorkListTableColumnsHelper = (
   organisations,
   categories,
@@ -41,6 +52,78 @@ export const setWorkListTableColumnsHelper = (
     dataIndex: '№',
     key: '№',
     width: '2%',
+    align: 'center',
+  },
+  {
+    title: 'Улица',
+    dataIndex: 'address',
+    key: 'address',
+    render: (text, record) => (
+      <a
+        onClick={() => {
+          setRecord(record)
+          setVisible(true)
+        }}
+      >
+        {text}
+      </a>
+    ),
+  },
+  {
+    title: 'Участок',
+    dataIndex: 'area',
+    key: 'area',
+  },
+  {
+    title: 'Категория работ',
+    dataIndex: 'category',
+    key: 'category',
+    filters: setFilterSelectsHelper(categories),
+    onFilter: (value, record) => record.category.indexOf(value) === 0,
+  },
+  {
+    title: 'Отв орган',
+    dataIndex: 'organisation',
+    key: 'organisation',
+    filters: setFilterSelectsHelper(organisations),
+    onFilter: (value, record) => record.organisation.indexOf(value) === 0,
+  },
+  {
+    title: 'Дата начала',
+    dataIndex: 'start-date',
+    key: 'start-date',
+    width: '10%',
+    align: 'center',
+  },
+  {
+    title: 'Дата окончания',
+    dataIndex: 'end-date',
+    key: 'end-date',
+    width: '10%',
+    align: 'center',
+  },
+  {
+    title: 'Статус (%)',
+    dataIndex: 'percentage',
+    key: 'percentage',
+    editable: true,
+    width: '5%',
+    rule: true,
+    type: 'number',
+  },
+]
+
+export const setCrossListTableColumnsHelper = (
+  categories,
+  setVisible,
+  setRecord
+) => [
+  {
+    title: '№',
+    dataIndex: '№',
+    key: '№',
+    width: '2%',
+    align: 'center',
   },
   {
     title: 'Улица',
@@ -59,63 +142,21 @@ export const setWorkListTableColumnsHelper = (
     ),
   },
   {
-    title: 'Участок',
-    dataIndex: 'area',
-    key: 'area',
-    editable: true,
-  },
-  {
     title: 'Категория работ',
     dataIndex: 'category',
     key: 'category',
-    editable: true,
-    type: 'select',
-    rule: true,
-    placeholder: 'Категоря работ',
     filters: setFilterSelectsHelper(categories),
-    data:
-      categories.status === 'success' ? categories.data.map((r) => r.name) : [],
+    onFilter: (value, record) => record.category.indexOf(value) === 0,
   },
   {
-    title: 'Отв орган',
-    dataIndex: 'organisation',
-    key: 'organisation',
-    editable: true,
-    type: 'select',
-    rule: true,
-    filters: setFilterSelectsHelper(organisations),
-    placeholder: 'Ответсвенный орган',
-    data:
-      organisations.status === 'success'
-        ? organisations.data.map((o) => o.name)
-        : [],
+    title: 'Работа 1',
+    dataIndex: 'Работа 1',
+    key: 'Работа 1',
   },
   {
-    title: 'Дата начала',
-    dataIndex: 'start-date',
-    key: 'start-date',
-    editable: true,
-    rule: true,
-    width: '10%',
-    type: 'picker',
-  },
-  {
-    title: 'Дата окончания',
-    dataIndex: 'end-date',
-    key: 'end-date',
-    rule: true,
-    editable: true,
-    type: 'picker',
-    width: '10%',
-  },
-  {
-    title: 'Статус (%)',
-    dataIndex: 'percentage',
-    key: 'percentage',
-    editable: true,
-    width: '5%',
-    rule: true,
-    type: 'number',
+    title: 'Работа 2',
+    dataIndex: 'Работа 2',
+    key: 'Работа 2',
   },
 ]
 

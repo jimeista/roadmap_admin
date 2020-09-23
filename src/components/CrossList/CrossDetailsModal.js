@@ -1,9 +1,7 @@
 import React from 'react'
 import { Modal, Button } from 'antd'
 
-import { WorkConfirm } from './form/WorkConfirm'
-
-export const WorkDetailsModal = (props) => {
+export const CrossDetailsModal = (props) => {
   const { visible, setVisible, record } = props
 
   console.log(record)
@@ -21,7 +19,7 @@ export const WorkDetailsModal = (props) => {
         </Button>,
       ]}
     >
-      <WorkConfirm ob={record} />
+      hahhahaha
     </Modal>
   )
 }

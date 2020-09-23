@@ -2,44 +2,36 @@ import React, { useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { Form } from 'antd'
 
-import { WorkDetailsModal } from './WorkDetailsModal'
+import { CrossDetailsModal } from './CrossDetailsModal'
 import { CustomTable as Table } from '../../common'
 import {
-  setWorkListTableColumnsHelper,
-  setWorkListDataSourceHelper,
+  setCrossListTableColumnsHelper,
+  setCrossListDataSourceHelper,
 } from '../../utils/helper'
 
-export const WorkListTable = () => {
-  const { organisations, categories, status, data } = useSelector(
-    (state) => state.roadmap
-  )
+export const CrossListTable = () => {
+  const { categories, status, data } = useSelector((state) => state.roadmap)
   const [visible, setVisible] = useState(false)
   const [record, setRecord] = useState({})
 
   const [form] = Form.useForm()
 
   const columns = useMemo(() => {
-    return setWorkListTableColumnsHelper(
-      organisations,
-      categories,
-      setVisible,
-      setRecord
-    )
-  }, [organisations, categories, setVisible, setRecord])
+    return setCrossListTableColumnsHelper(categories, setVisible, setRecord)
+  }, [categories, setVisible, setRecord])
 
   return (
     <Form form={form}>
       <Form.Item name='table'>
         <Table
           columns={columns}
-          dataSource={setWorkListDataSourceHelper(data)}
+          dataSource={setCrossListDataSourceHelper(data)}
           loading={status === 'loading' ? true : false}
-          isEditable={true}
         />
       </Form.Item>
       {visible && (
         <Form.Item name='modal'>
-          <WorkDetailsModal
+          <CrossDetailsModal
             visible={visible}
             setVisible={setVisible}
             record={record}

@@ -10,7 +10,7 @@ import {
 import { CustomTabs as Tabs } from '../common'
 
 import { WorkList } from './WorkList/index'
-import { CrossList } from './CrossList'
+import { CrossList } from './CrossList/index'
 
 export const RoadMap = () => {
   const dispatch = useDispatch()

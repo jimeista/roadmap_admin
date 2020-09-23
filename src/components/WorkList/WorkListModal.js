@@ -12,7 +12,7 @@ import {
   WorkContractor,
   WorkStatus,
   WorkConfirm,
-} from '../steps'
+} from './form'
 
 export const WorkListModal = () => {
   const [visible, setVisible] = useState()
@@ -25,7 +25,11 @@ export const WorkListModal = () => {
 
   return (
     <>
-      <Button type='primary' onClick={() => setVisible(true)}>
+      <Button
+        type='primary'
+        onClick={() => setVisible(true)}
+        style={{ marginBottom: 10 }}
+      >
         Добавить
       </Button>
       <Modal

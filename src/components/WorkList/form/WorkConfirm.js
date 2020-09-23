@@ -4,7 +4,7 @@ import { Form } from 'antd'
 import {
   nameEnToRuWorkListHelper,
   prepareToShowDetailsObToArr,
-} from '../../utils/helper'
+} from '../../../utils/helper'
 
 export const WorkConfirm = ({ ob }) => {
   const arr = useMemo(() => {
