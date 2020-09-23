@@ -48,15 +48,12 @@ const nameHelper = (name) => {
     case 'region':
       return 'Район'
     case 'supervisor-name':
-      return 'ФИО руководителя'
     case 'contacts':
       return 'Контакты'
     case 'warranty-period':
       return 'Гарантийный период'
     case 'canvas-descr':
       return 'Описание вскрытия'
-    case 'contacts':
-      return 'Контакты'
     default:
       return name
   }

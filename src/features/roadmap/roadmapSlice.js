@@ -69,6 +69,7 @@ export const roadmapSlice = createSlice({
     error: null,
     formData: {},
     current: 0,
+    mapData: {},
   },
   reducers: {
     formValidate: (state, action) => {
@@ -77,6 +78,9 @@ export const roadmapSlice = createSlice({
     },
     setCurrent: (state, action) => {
       state.current = action.payload
+    },
+    setMapData: (state, action) => {
+      state.mapData = { ...state.mapData, ...action.payload }
     },
   },
   extraReducers: {
@@ -130,7 +134,7 @@ export const roadmapSlice = createSlice({
   },
 })
 
-export const { formValidate, setCurrent } = roadmapSlice.actions
+export const { formValidate, setCurrent, setMapData } = roadmapSlice.actions
 
 export const selectRoadMap = (state) => state.roadmap
 

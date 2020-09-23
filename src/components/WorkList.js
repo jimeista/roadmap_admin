@@ -7,6 +7,7 @@ import {
   CustomModal as Modal,
   CustomSteps as Steps,
   CustomTable as Table,
+  CustomYandexMap as YandexMap,
 } from '../common'
 import {
   WorkDescription,
@@ -79,6 +80,7 @@ export const WorkList = () => {
       type: 'select',
       rule: true,
       placeholder: 'Категоря работ',
+      filters: removeDuplicatesHelper(categories),
       data:
         categories.status === 'success'
           ? categories.data.map((r) => r.name)
@@ -91,6 +93,7 @@ export const WorkList = () => {
       editable: true,
       type: 'select',
       rule: true,
+      filters: removeDuplicatesHelper(organisations),
       placeholder: 'Ответсвенный орган',
       data:
         organisations.status === 'success'
@@ -141,7 +144,9 @@ export const WorkList = () => {
             formValidate={formValidate}
             dispatch={dispatch}
           />
-          <div style={{ width: '100%' }} />
+          <div style={{ width: '100%' }}>
+            <YandexMap />
+          </div>
         </div>
       </Modal>
       <Table
@@ -163,4 +168,19 @@ const dataSourceHelper = (arr) => {
   })
 
   return dataSource
+}
+
+const removeDuplicatesHelper = (response) => {
+  let ob = {}
+  let result = []
+  if (response.status === 'success') {
+    const data = response.data
+    for (let i = 0; i < data.length; i++) {
+      ob = { ...ob, [data[i].name]: data[i].name }
+    }
+    result = Object.keys(ob).map((key) => ({ text: key, value: key }))
+  }
+
+  console.log(result)
+  return result
 }
