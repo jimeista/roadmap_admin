@@ -16,9 +16,9 @@ export const setFilterSelectsHelper = (response) => {
 export const setWorkListDataSourceHelper = (arr) => {
   const dataSource = arr.map((i, index) => {
     let keys = { '№': index + 1, key: index + 1 }
-    Object.keys(i).map((key) => {
+    Object.keys(i).forEach((key) => {
       if (key === 'status') {
-        Object.keys(i[key]).map((k) => (keys = { ...keys, [k]: i[key][k] }))
+        Object.keys(i[key]).forEach((k) => (keys = { ...keys, [k]: i[key][k] }))
       } else {
         keys = { ...keys, [key]: i[key] }
       }

@@ -24,7 +24,7 @@ export const WorkStatus = () => {
           parser={(value) => value.replace('%', '')}
         />
       </Form.Item>
-      <Form.Item name='percentage-comment'>
+      <Form.Item name='commentary'>
         <TextArea style={{ height: 90 }} placeholder='Комментарий' />
       </Form.Item>
       <Form.Item name='is-hidden' valuePropName='checked'>

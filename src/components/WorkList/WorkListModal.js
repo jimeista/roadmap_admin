@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Modal } from 'antd'
 
-import { formValidate, setCurrent } from '../../features/roadmap/roadmapSlice'
+import {
+  formValidate,
+  setCurrent,
+  postRoadMap,
+} from '../../features/roadmap/roadmapSlice'
 import {
   CustomSteps as Steps,
   CustomYandexMap as YandexMap,
@@ -22,6 +26,55 @@ export const WorkListModal = () => {
   )
 
   const steps = setSteps(organisations, regions, categories, formData)
+
+  const postFormData = (data) => {
+    let ob = {}
+    Object.keys(data).forEach((key) => {
+      if (data[key]) {
+        if (key === 'end-date' || key === 'start-date') {
+          data[key].length > 4
+            ? (ob = { ...ob, [key]: data[key] })
+            : (ob = { ...ob, [key]: `${data[key]}-01-01` })
+        } else if (key === 'category') {
+          const id = categories.data.find((o) => o.name === data[key]).id
+          ob = { ...ob, 'category-id': id }
+        } else if (key === 'percentage') {
+          const obb = {
+            percentage: data[key],
+            'is-hidden': data['is-hidden'],
+            'is-canceled': data['is-canceled'],
+            commentray: data.commentary,
+          }
+
+          let new_obb = {}
+
+          Object.keys(obb).forEach((o) => {
+            if (obb[o] !== undefined) {
+              new_obb = { ...new_obb, [o]: obb[o] }
+            }
+          })
+
+          ob = { ...ob, status: new_obb }
+        } else if (key === 'organisation') {
+          const id = organisations.data.find((o) => o.name === data[key]).id
+          ob = { ...ob, 'organisation-id': id }
+        } else if (key === 'region') {
+          const id = regions.data.find((o) => o.name === data[key]).id
+          ob = { ...ob, 'region-id': id }
+        } else {
+          ob = { ...ob, [key]: data[key] }
+        }
+      }
+      if (key === 'is-canvas-opened' || key === 'is-closured') {
+        ob = { ...ob, [key]: false }
+      }
+    })
+
+    console.log(ob)
+
+    dispatch(postRoadMap(ob))
+    setVisible(false)
+  }
 
   return (
     <>
@@ -45,7 +98,7 @@ export const WorkListModal = () => {
           <Button
             key='submit'
             type='primary'
-            onClick={() => setVisible(true)}
+            onClick={() => postFormData(formData)}
             disabled={current !== 3 ? true : false}
           >
             Отправить

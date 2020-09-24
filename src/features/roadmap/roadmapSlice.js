@@ -48,7 +48,7 @@ export const fetchIntersections = createAsyncThunk(
 )
 
 export const postRoadMap = createAsyncThunk(
-  'roadmap/post',
+  'roadmap/postRoadMap',
   async (initialPost) => {
     const res = await axios.post(BASE_ROADMAP_URL, initialPost)
     return res.post
