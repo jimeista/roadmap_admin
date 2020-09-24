@@ -6,8 +6,6 @@ import { WorkConfirm } from './form/WorkConfirm'
 export const WorkDetailsModal = (props) => {
   const { visible, setVisible, record } = props
 
-  console.log(record)
-
   return (
     <Modal
       title='Детали улицы'

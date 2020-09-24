@@ -51,7 +51,15 @@ export const postRoadMap = createAsyncThunk(
   'roadmap/postRoadMap',
   async (initialPost) => {
     const res = await axios.post(BASE_ROADMAP_URL, initialPost)
-    return res.post
+    return JSON.parse(res.config.data)
+  }
+)
+
+export const postIntersections = createAsyncThunk(
+  'roadmap/postIntersections',
+  async (initialPost) => {
+    const res = await axios.post(BASE_INTERSECTIONS_URL, initialPost)
+    return JSON.parse(res.config.data)
   }
 )
 
@@ -87,7 +95,6 @@ export const roadmapSlice = createSlice({
   },
   reducers: {
     formValidate: (state, action) => {
-      // console.log(action.payload)
       state.formData = { ...state.formData, ...action.payload }
     },
     setCurrent: (state, action) => {
@@ -153,8 +160,26 @@ export const roadmapSlice = createSlice({
       state.intersections.status = 'failed'
       state.intersections.error = action.payload
     },
-    [postRoadMap.success]: (state, action) => {
-      state.data.push(action.payload)
+    [postRoadMap.fulfilled]: (state, action) => {
+      state.status = 'success'
+      let ob = action.payload
+      const category = state.categories.data.find(
+        (i) => i.id === action.payload.category
+      ).name
+      const region = state.regions.data.find(
+        (i) => i.id === action.payload.region
+      ).name
+      const organisation = state.organisations.data.find(
+        (i) => i.id === action.payload.organisation
+      ).name
+      ob = { ...ob, category, region, organisation }
+      state.data = [ob, ...state.data]
+    },
+    [postRoadMap.pending]: (state) => {
+      state.status = 'loading'
+    },
+    [postIntersections.succes]: async (state, action) => {
+      state.intersections.data = [action.payload, ...state.intersections.data]
     },
   },
 })

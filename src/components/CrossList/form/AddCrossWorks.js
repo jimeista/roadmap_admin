@@ -5,8 +5,61 @@ import { useSelector } from 'react-redux'
 const { Option } = Select
 
 export const AddCrossWorks = () => {
-  const { categories } = useSelector((state) => state.roadmap)
+  const { categories, data } = useSelector((state) => state.roadmap)
   const [count, setCount] = useState([1, 2])
+  const [options, setOptions] = useState()
+
+  const renderSelectsGroup = (key) => {
+    let arr =
+      categories.status === 'success' ? categories.data.map((r) => r.name) : []
+
+    return (
+      <Form.Item style={{ marginRight: 20 }}>
+        <Form.Item
+          rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
+        >
+          <Select
+            placeholder={'Категория работ'}
+            style={{ width: 240 }}
+            allowClear
+            onChange={(value) =>
+              setOptions((state) => ({
+                ...state,
+                [key]: data
+                  .filter((i) => i.category === value)
+                  .map((i) => i.id),
+              }))
+            }
+          >
+            {arr.map((i, index) => (
+              <Option value={i} key={i}>
+                {i}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name={`roadwork-${key}`}
+          rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
+          key={`roadwork-${key}`}
+        >
+          <Select
+            placeholder={`Работа ${key}`}
+            style={{ width: 240 }}
+            allowClear
+          >
+            {options && options[key]
+              ? options[key].map((i, index) => (
+                  <Option value={i} key={i}>
+                    {i}
+                  </Option>
+                ))
+              : null}
+          </Select>
+        </Form.Item>
+      </Form.Item>
+    )
+  }
 
   return (
     <div style={{ marginBottom: 20 }}>
@@ -16,7 +69,7 @@ export const AddCrossWorks = () => {
           flexWrap: 'wrap',
         }}
       >
-        {count.map((i) => renderSelectsGroup(categories, [], i))}
+        {count.map((i) => renderSelectsGroup(i))}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', marginTop: 15 }}>
         <div style={{ marginRight: 25 }}>
@@ -45,52 +98,6 @@ export const AddCrossWorks = () => {
           <span style={{ marginLeft: 5 }}>Убрать одну</span>
         </>
       </div>
-    </div>
-  )
-}
-
-const renderSelectsGroup = (categories, roadworks = [], count) => {
-  const arr =
-    categories.status === 'success' ? categories.data.map((r) => r.name) : []
-
-  return (
-    <div style={{ marginRight: 20 }}>
-      <Form.Item
-        name={'category'}
-        rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
-        key={`category}`}
-        hasFeedback
-      >
-        <Select
-          placeholder={'Категория работ'}
-          style={{ width: 240 }}
-          allowClear
-        >
-          {arr.map((i, index) => (
-            <Option value={i} key={i}>
-              {i}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        name={'roadwork'}
-        rules={[{ required: true, message: 'Необходимо заполнить поле!' }]}
-        key={`roadwork}`}
-        hasFeedback
-      >
-        <Select
-          placeholder={`Работа ${count}`}
-          style={{ width: 240 }}
-          allowClear
-        >
-          {roadworks.map((i, index) => (
-            <Option value={i} key={i}>
-              {i}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
     </div>
   )
 }

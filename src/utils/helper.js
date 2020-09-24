@@ -279,20 +279,16 @@ export const postNewRoadWork = (data, categories, organisations, regions) => {
         data[key].length > 4
           ? (ob = { ...ob, [key]: data[key] })
           : (ob = { ...ob, [key]: `${data[key]}-01-01` })
-      }
-      // else if (key === 'category') {
-      //   const id = categories.data.find((o) => o.name === data[key]).id
-      //   ob = { ...ob, 'category-id': id }
-      // }
-      // else if (key === 'organisation') {
-      //   const id = organisations.data.find((o) => o.name === data[key]).id
-      //   ob = { ...ob, 'organisation-id': id }
-      // }
-      // else if (key === 'region') {
-      //   const id = regions.data.find((o) => o.name === data[key]).id
-      //   ob = { ...ob, 'region-id': id }
-      // }
-      else if (key === 'percentage') {
+      } else if (key === 'category') {
+        const id = categories.data.find((o) => o.name === data[key]).id
+        ob = { ...ob, [key]: id }
+      } else if (key === 'organisation') {
+        const id = organisations.data.find((o) => o.name === data[key]).id
+        ob = { ...ob, [key]: id }
+      } else if (key === 'region') {
+        const id = regions.data.find((o) => o.name === data[key]).id
+        ob = { ...ob, [key]: id }
+      } else if (key === 'percentage') {
         const obb = {
           percentage: data[key],
           'is-hidden': data['is-hidden'],
@@ -313,9 +309,9 @@ export const postNewRoadWork = (data, categories, organisations, regions) => {
         ob = { ...ob, [key]: data[key] }
       }
     }
-    // if (key === 'is-canvas-opened' || key === 'is-closured') {
-    //   ob = { ...ob, [key]: false }
-    // }
+    if (key === 'is-canvas-opened' || key === 'is-closured') {
+      ob = { ...ob, [key]: false }
+    }
   })
 
   return ob

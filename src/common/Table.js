@@ -86,11 +86,9 @@ export const CustomTable = (props) => {
   const save = async (record) => {
     try {
       const row = await form.validateFields()
-      console.log(row, record)
       setEditingKey('')
 
-      const ob = { ...record, ...row }
-      console.log(ob)
+      console.log({ status: row })
 
       // const newData = [...props.dataSource]
       // const index = newData.findIndex((item) => key === item.key)

@@ -22,21 +22,23 @@ import { postNewRoadWork } from '../../utils/helper'
 
 export const WorkListModal = () => {
   const [visible, setVisible] = useState()
-  const [confirmLoading, setCofirmLoading] = useState(false)
   const dispatch = useDispatch()
-  const { organisations, regions, categories, formData, current } = useSelector(
-    (state) => state.roadmap
-  )
+  const {
+    organisations,
+    regions,
+    categories,
+    formData,
+    current,
+    status,
+  } = useSelector((state) => state.roadmap)
 
   const steps = setSteps(organisations, regions, categories, formData)
 
   const postFormData = async (data) => {
     try {
-      setCofirmLoading(true)
       let ob = postNewRoadWork(data, categories, organisations, regions)
       dispatch(postRoadMap(ob))
-      await sleep(setVisible)
-      setCofirmLoading(true)
+      status === 'success' && setVisible(false)
     } catch (err) {
       console.log(err.message)
     }
@@ -64,7 +66,7 @@ export const WorkListModal = () => {
           <Button
             key='submit'
             type='primary'
-            confirmLoading={confirmLoading}
+            confirmLoading={status}
             onClick={() => postFormData(formData)}
             disabled={current !== 3 ? true : false}
           >
@@ -117,6 +119,3 @@ const setSteps = (organisations, regions, categories, formData) => [
     content: <WorkConfirm ob={formData} />,
   },
 ]
-
-const sleep = (setVisible) =>
-  new Promise((res) => setTimeout(() => setVisible(false), 2000))

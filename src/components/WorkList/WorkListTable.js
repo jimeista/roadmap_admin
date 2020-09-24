@@ -19,12 +19,12 @@ export const WorkListTable = () => {
   const [form] = Form.useForm()
 
   const columns = useMemo(() => {
-    return setWorkListTableColumnsHelper(
+    return (setWorkListTableColumnsHelper(
       organisations,
       categories,
       setVisible,
       setRecord
-    )
+    ): [])
   }, [organisations, categories, setVisible, setRecord])
 
   return (
