@@ -30,9 +30,9 @@ export const setWorkListDataSourceHelper = (arr) => {
 }
 
 export const setCrossListDataSourceHelper = (arr, intersections) => {
-  let data = []
+  let columns = []
   if (intersections.status === 'success') {
-    data = intersections.data.map((i, index) => {
+    columns = intersections.data.map((i, index) => {
       let ob = {
         '№': index + 1,
         key: index + 1,
@@ -42,7 +42,7 @@ export const setCrossListDataSourceHelper = (arr, intersections) => {
       i['roadwork-ids'].forEach((id, key) => {
         ob = {
           ...ob,
-          [`category ${key + 1}`]: arr.find((i) => i.id === id).category,
+          category: arr.find((i) => i.id === id).category,
           [`Работа ${key + 1}`]: id,
         }
       })
@@ -50,7 +50,7 @@ export const setCrossListDataSourceHelper = (arr, intersections) => {
       return ob
     })
 
-    return data
+    return columns
   }
 
   const dataSource = arr.map((i, index) => {
@@ -140,7 +140,8 @@ export const setCrossListTableColumnsHelper = (
   categories,
   setVisible,
   setRecord,
-  intersections
+  intersections,
+  data
 ) => {
   let arr = []
 
@@ -153,18 +154,16 @@ export const setCrossListTableColumnsHelper = (
     })
 
     for (let i = 0; i < count; i++) {
-      arr.push({
-        title: `Категория работ ${i + 1}`,
-        dataIndex: `category ${i + 1}`,
-        key: `category ${i + 1}`,
-        filters: setFilterSelectsHelper(categories),
-        onFilter: (value, record) => record.category.indexOf(value) === 0,
-      })
-      arr.push({
-        title: `Работа ${i + 1}`,
-        dataIndex: `Работа ${i + 1}`,
-        key: `Работа ${i + 1}`,
-      })
+      arr = [
+        ...arr,
+        {
+          title: `Работа ${i + 1}`,
+          dataIndex: `Работа ${i + 1}`,
+          key: `Работа ${i + 1}`,
+          width: '10%',
+          align: 'center',
+        },
+      ]
     }
   }
 
@@ -190,6 +189,11 @@ export const setCrossListTableColumnsHelper = (
           {text}
         </a>
       ),
+    },
+    {
+      title: 'Категория работ',
+      dataIndex: 'category',
+      key: 'category',
     },
   ]
 
@@ -266,3 +270,53 @@ export const prepareToShowDetailsObToArr = (ob) => {
 export const findLotName = (id, data) =>
   //should return lot-name not id
   data.find((i) => i.id === id).id
+
+export const postNewRoadWork = (data, categories, organisations, regions) => {
+  let ob = {}
+  Object.keys(data).forEach((key) => {
+    if (data[key]) {
+      if (key === 'end-date' || key === 'start-date') {
+        data[key].length > 4
+          ? (ob = { ...ob, [key]: data[key] })
+          : (ob = { ...ob, [key]: `${data[key]}-01-01` })
+      }
+      // else if (key === 'category') {
+      //   const id = categories.data.find((o) => o.name === data[key]).id
+      //   ob = { ...ob, 'category-id': id }
+      // }
+      // else if (key === 'organisation') {
+      //   const id = organisations.data.find((o) => o.name === data[key]).id
+      //   ob = { ...ob, 'organisation-id': id }
+      // }
+      // else if (key === 'region') {
+      //   const id = regions.data.find((o) => o.name === data[key]).id
+      //   ob = { ...ob, 'region-id': id }
+      // }
+      else if (key === 'percentage') {
+        const obb = {
+          percentage: data[key],
+          'is-hidden': data['is-hidden'],
+          'is-canceled': data['is-canceled'],
+          commentray: data.commentary,
+        }
+
+        let new_obb = {}
+
+        Object.keys(obb).forEach((o) => {
+          if (obb[o] !== undefined) {
+            new_obb = { ...new_obb, [o]: obb[o] }
+          }
+        })
+
+        ob = { ...ob, status: new_obb }
+      } else {
+        ob = { ...ob, [key]: data[key] }
+      }
+    }
+    // if (key === 'is-canvas-opened' || key === 'is-closured') {
+    //   ob = { ...ob, [key]: false }
+    // }
+  })
+
+  return ob
+}

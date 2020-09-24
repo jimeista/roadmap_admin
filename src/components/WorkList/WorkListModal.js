@@ -6,6 +6,7 @@ import {
   formValidate,
   setCurrent,
   postRoadMap,
+  fetchRoadMap,
 } from '../../features/roadmap/roadmapSlice'
 import {
   CustomSteps as Steps,
@@ -17,9 +18,11 @@ import {
   WorkStatus,
   WorkConfirm,
 } from './form'
+import { postNewRoadWork } from '../../utils/helper'
 
 export const WorkListModal = () => {
   const [visible, setVisible] = useState()
+  const [confirmLoading, setCofirmLoading] = useState(false)
   const dispatch = useDispatch()
   const { organisations, regions, categories, formData, current } = useSelector(
     (state) => state.roadmap
@@ -27,53 +30,16 @@ export const WorkListModal = () => {
 
   const steps = setSteps(organisations, regions, categories, formData)
 
-  const postFormData = (data) => {
-    let ob = {}
-    Object.keys(data).forEach((key) => {
-      if (data[key]) {
-        if (key === 'end-date' || key === 'start-date') {
-          data[key].length > 4
-            ? (ob = { ...ob, [key]: data[key] })
-            : (ob = { ...ob, [key]: `${data[key]}-01-01` })
-        } else if (key === 'category') {
-          const id = categories.data.find((o) => o.name === data[key]).id
-          ob = { ...ob, 'category-id': id }
-        } else if (key === 'percentage') {
-          const obb = {
-            percentage: data[key],
-            'is-hidden': data['is-hidden'],
-            'is-canceled': data['is-canceled'],
-            commentray: data.commentary,
-          }
-
-          let new_obb = {}
-
-          Object.keys(obb).forEach((o) => {
-            if (obb[o] !== undefined) {
-              new_obb = { ...new_obb, [o]: obb[o] }
-            }
-          })
-
-          ob = { ...ob, status: new_obb }
-        } else if (key === 'organisation') {
-          const id = organisations.data.find((o) => o.name === data[key]).id
-          ob = { ...ob, 'organisation-id': id }
-        } else if (key === 'region') {
-          const id = regions.data.find((o) => o.name === data[key]).id
-          ob = { ...ob, 'region-id': id }
-        } else {
-          ob = { ...ob, [key]: data[key] }
-        }
-      }
-      if (key === 'is-canvas-opened' || key === 'is-closured') {
-        ob = { ...ob, [key]: false }
-      }
-    })
-
-    console.log(ob)
-
-    dispatch(postRoadMap(ob))
-    setVisible(false)
+  const postFormData = async (data) => {
+    try {
+      setCofirmLoading(true)
+      let ob = postNewRoadWork(data, categories, organisations, regions)
+      dispatch(postRoadMap(ob))
+      await sleep(setVisible)
+      setCofirmLoading(true)
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   return (
@@ -98,6 +64,7 @@ export const WorkListModal = () => {
           <Button
             key='submit'
             type='primary'
+            confirmLoading={confirmLoading}
             onClick={() => postFormData(formData)}
             disabled={current !== 3 ? true : false}
           >
@@ -150,3 +117,6 @@ const setSteps = (organisations, regions, categories, formData) => [
     content: <WorkConfirm ob={formData} />,
   },
 ]
+
+const sleep = (setVisible) =>
+  new Promise((res) => setTimeout(() => setVisible(false), 2000))
