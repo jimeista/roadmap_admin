@@ -30,17 +30,32 @@ export const setWorkListDataSourceHelper = (arr) => {
 }
 
 export const setCrossListDataSourceHelper = (arr, intersections) => {
+  let data = []
   if (intersections.status === 'success') {
-    intersections.data.map((i, index) => ({
-      '№': index + 1,
-      key: index + 1,
-      address: 'some street',
-    }))
+    data = intersections.data.map((i, index) => {
+      let ob = {
+        '№': index + 1,
+        key: index + 1,
+        address: 'some street',
+      }
+
+      i['roadwork-ids'].forEach((id, key) => {
+        ob = {
+          ...ob,
+          [`category ${key + 1}`]: arr.find((i) => i.id === id).category,
+          [`Работа ${key + 1}`]: id,
+        }
+      })
+
+      return ob
+    })
+
+    return data
   }
 
   const dataSource = arr.map((i, index) => {
     let keys = { '№': index + 1, key: index + 1 }
-    Object.keys(i).map((key) => {
+    Object.keys(i).forEach((key) => {
       keys = { ...keys, [key]: i[key] }
     })
     return keys
@@ -140,8 +155,8 @@ export const setCrossListTableColumnsHelper = (
     for (let i = 0; i < count; i++) {
       arr.push({
         title: `Категория работ ${i + 1}`,
-        dataIndex: 'category',
-        key: 'category',
+        dataIndex: `category ${i + 1}`,
+        key: `category ${i + 1}`,
         filters: setFilterSelectsHelper(categories),
         onFilter: (value, record) => record.category.indexOf(value) === 0,
       })
