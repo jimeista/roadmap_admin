@@ -6,12 +6,15 @@ import {
   SaveOutlined,
   CloseOutlined,
 } from '@ant-design/icons'
+import { useDispatch } from 'react-redux'
 
+import { putRoadMap } from '../features/roadmap/roadmapSlice'
 import { EditableCell } from './EditableCell'
 
 export const CustomTable = (props) => {
   const [form] = Form.useForm()
   const [editingKey, setEditingKey] = useState('')
+  const dispatch = useDispatch()
 
   const arr = [
     ...props.columns,
@@ -87,9 +90,7 @@ export const CustomTable = (props) => {
     try {
       const row = await form.validateFields()
       setEditingKey('')
-
-      console.log({ status: row })
-
+      dispatch(putRoadMap({ status: row, id: record.id }))
       // const newData = [...props.dataSource]
       // const index = newData.findIndex((item) => key === item.key)
       // if (index > -1) {

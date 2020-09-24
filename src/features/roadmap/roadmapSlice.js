@@ -63,6 +63,14 @@ export const postIntersections = createAsyncThunk(
   }
 )
 
+export const putRoadMap = createAsyncThunk(
+  'roadmap/putRoadMap',
+  async (updatedPost) => {
+    await axios.put(`${BASE_ROADMAP_URL}/${updatedPost.id}`, updatedPost.status)
+    return updatedPost
+  }
+)
+
 export const roadmapSlice = createSlice({
   name: 'roadmap',
   initialState: {
@@ -178,8 +186,16 @@ export const roadmapSlice = createSlice({
     [postRoadMap.pending]: (state) => {
       state.status = 'loading'
     },
-    [postIntersections.succes]: async (state, action) => {
+    [postIntersections.succes]: (state, action) => {
       state.intersections.data = [action.payload, ...state.intersections.data]
+    },
+    [putRoadMap.fulfilled]: (state, action) => {
+      state.status = 'success'
+      state.data.find((i) => i.id === action.payload.id).status =
+        action.payload.status
+    },
+    [putRoadMap.pending]: (state, action) => {
+      state.status = 'loading'
     },
   },
 })
