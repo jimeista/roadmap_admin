@@ -5,6 +5,7 @@ import {
   fecthRegions,
   fetchCategories,
   fetchRoadMap,
+  fetchIntersections,
 } from '../features/roadmap/roadmapSlice'
 
 import { CustomTabs as Tabs } from '../common'
@@ -20,6 +21,7 @@ export const RoadMap = () => {
     dispatch(fecthRegions())
     dispatch(fetchCategories())
     dispatch(fetchRoadMap())
+    dispatch(fetchIntersections())
   }, [])
 
   return <Tabs tabs={tabs} />

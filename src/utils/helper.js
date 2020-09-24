@@ -29,7 +29,15 @@ export const setWorkListDataSourceHelper = (arr) => {
   return dataSource
 }
 
-export const setCrossListDataSourceHelper = (arr) => {
+export const setCrossListDataSourceHelper = (arr, intersections) => {
+  if (intersections.status === 'success') {
+    intersections.data.map((i, index) => ({
+      '№': index + 1,
+      key: index + 1,
+      address: 'some street',
+    }))
+  }
+
   const dataSource = arr.map((i, index) => {
     let keys = { '№': index + 1, key: index + 1 }
     Object.keys(i).map((key) => {
@@ -116,49 +124,62 @@ export const setWorkListTableColumnsHelper = (
 export const setCrossListTableColumnsHelper = (
   categories,
   setVisible,
-  setRecord
-) => [
-  {
-    title: '№',
-    dataIndex: '№',
-    key: '№',
-    width: '2%',
-    align: 'center',
-  },
-  {
-    title: 'Улица',
-    dataIndex: 'address',
-    key: 'address',
-    editable: true,
-    render: (text, record) => (
-      <a
-        onClick={() => {
-          setRecord(record)
-          setVisible(true)
-        }}
-      >
-        {text}
-      </a>
-    ),
-  },
-  {
-    title: 'Категория работ',
-    dataIndex: 'category',
-    key: 'category',
-    filters: setFilterSelectsHelper(categories),
-    onFilter: (value, record) => record.category.indexOf(value) === 0,
-  },
-  {
-    title: 'Работа 1',
-    dataIndex: 'Работа 1',
-    key: 'Работа 1',
-  },
-  {
-    title: 'Работа 2',
-    dataIndex: 'Работа 2',
-    key: 'Работа 2',
-  },
-]
+  setRecord,
+  intersections
+) => {
+  let arr = []
+
+  if (intersections.status === 'success') {
+    let count = 0
+    intersections.data.forEach((i) => {
+      if (i['roadwork-ids'].length > count) {
+        count = i['roadwork-ids'].length
+      }
+    })
+
+    for (let i = 0; i < count; i++) {
+      arr.push({
+        title: `Категория работ ${i + 1}`,
+        dataIndex: 'category',
+        key: 'category',
+        filters: setFilterSelectsHelper(categories),
+        onFilter: (value, record) => record.category.indexOf(value) === 0,
+      })
+      arr.push({
+        title: `Работа ${i + 1}`,
+        dataIndex: `Работа ${i + 1}`,
+        key: `Работа ${i + 1}`,
+      })
+    }
+  }
+
+  const cols = [
+    {
+      title: '№',
+      dataIndex: '№',
+      key: '№',
+      width: '2%',
+      align: 'center',
+    },
+    {
+      title: 'Улица',
+      dataIndex: 'address',
+      key: 'address',
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            setRecord(record)
+            setVisible(true)
+          }}
+        >
+          {text}
+        </a>
+      ),
+    },
+  ]
+
+  return [...cols, ...arr]
+}
 
 export const nameEnToRuWorkListHelper = (name) => {
   switch (name) {
@@ -226,3 +247,7 @@ export const prepareToShowDetailsObToArr = (ob) => {
 
   return arr
 }
+
+export const findLotName = (id, data) =>
+  //should return lot-name not id
+  data.find((i) => i.id === id).id

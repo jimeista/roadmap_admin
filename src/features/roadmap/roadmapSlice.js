@@ -5,6 +5,7 @@ const BASE_ORGANIZATIONS_URL = 'sc-roadworks/api/organisations'
 const BASE_REGIONS_URL = 'sc-roadworks/api/regions'
 const BASE_CATEGORIES_URL = 'sc-roadworks/api/categories'
 const BASE_ROADMAP_URL = 'sc-roadworks/api/roadworks'
+const BASE_INTERSECTIONS_URL = 'sc-roadworks/api/intersections'
 
 export const fecthOrganizations = createAsyncThunk(
   'roadmap/fetchOrganizations',
@@ -34,6 +35,14 @@ export const fetchRoadMap = createAsyncThunk(
   'roadmap/fetchRoadMap',
   async () => {
     const res = await axios.get(BASE_ROADMAP_URL)
+    return res.data
+  }
+)
+
+export const fetchIntersections = createAsyncThunk(
+  'roadmap/fetchIntersections',
+  async () => {
+    const res = await axios.get(BASE_INTERSECTIONS_URL)
     return res.data
   }
 )
@@ -70,6 +79,11 @@ export const roadmapSlice = createSlice({
     formData: {},
     current: 0,
     mapData: {},
+    intersections: {
+      status: 'idle',
+      error: null,
+      data: [],
+    },
   },
   reducers: {
     formValidate: (state, action) => {
@@ -127,6 +141,17 @@ export const roadmapSlice = createSlice({
     [fetchRoadMap.rejected]: (state, action) => {
       state.status = 'failed'
       state.error = action.payload
+    },
+    [fetchIntersections.fulfilled]: (state, action) => {
+      state.intersections.status = 'success'
+      state.intersections.data = action.payload
+    },
+    [fetchIntersections.pending]: (state, action) => {
+      state.intersections.status = 'loading'
+    },
+    [fetchIntersections.rejected]: (state, action) => {
+      state.intersections.status = 'failed'
+      state.intersections.error = action.payload
     },
     [postRoadMap.success]: (state, action) => {
       state.data.push(action.payload)
