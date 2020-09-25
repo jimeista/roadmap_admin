@@ -53,44 +53,46 @@ export const WorkListModal = () => {
       >
         Добавить
       </Button>
-      <Modal
-        title='Форма ввода данных по ремонтным работам'
-        visible={visible}
-        onOk={() => setVisible(true)}
-        onCancel={() => setVisible(false)}
-        width={'80%'}
-        footer={[
-          <Button key='back' onClick={() => setVisible(false)}>
-            Отменить
-          </Button>,
-          <Button
-            key='submit'
-            type='primary'
-            confirmLoading={status}
-            onClick={() => postFormData(formData)}
-            disabled={current !== 3 ? true : false}
-          >
-            Отправить
-          </Button>,
-        ]}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
+      {status === 'success' && (
+        <Modal
+          title='Форма ввода данных по ремонтным работам'
+          visible={visible}
+          onOk={() => setVisible(true)}
+          onCancel={() => setVisible(false)}
+          width={'80%'}
+          footer={[
+            <Button key='back' onClick={() => setVisible(false)}>
+              Отменить
+            </Button>,
+            <Button
+              key='submit'
+              type='primary'
+              confirmLoading={status}
+              onClick={() => postFormData(formData)}
+              disabled={current !== 3 ? true : false}
+            >
+              Отправить
+            </Button>,
+          ]}
         >
-          <Steps
-            steps={steps}
-            setCurrent={setCurrent}
-            formValidate={formValidate}
-            dispatch={dispatch}
-          />
-          <div style={{ width: '100%', paddingLeft: 10 }}>
-            <YandexMap />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Steps
+              steps={steps}
+              setCurrent={setCurrent}
+              formValidate={formValidate}
+              dispatch={dispatch}
+            />
+            <div style={{ width: '100%', paddingLeft: 10 }}>
+              <YandexMap />
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </>
   )
 }

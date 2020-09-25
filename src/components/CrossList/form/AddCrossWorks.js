@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Select, Form, Button } from 'antd'
+import { Select, Form, Button, Input } from 'antd'
 import { useSelector } from 'react-redux'
 
 const { Option } = Select
@@ -98,6 +98,12 @@ export const AddCrossWorks = () => {
           <span style={{ marginLeft: 5 }}>Убрать одну</span>
         </>
       </div>
+      <Form.Item name='area'>
+        <Input
+          placeholder={'Участок пересечения'}
+          style={{ width: '30%', marginTop: 15 }}
+        />
+      </Form.Item>
     </div>
   )
 }

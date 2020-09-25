@@ -18,7 +18,7 @@ export const WorkStatus = () => {
       >
         <InputNumber
           style={{ width: '120px' }}
-          min={0}
+          min={1}
           max={100}
           formatter={(value) => `${value}%`}
           parser={(value) => value.replace('%', '')}

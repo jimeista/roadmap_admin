@@ -20,8 +20,8 @@ export const RoadMap = () => {
     dispatch(fecthOrganizations())
     dispatch(fecthRegions())
     dispatch(fetchCategories())
-    dispatch(fetchRoadMap())
     dispatch(fetchIntersections())
+    dispatch(fetchRoadMap())
   }, [])
 
   return <Tabs tabs={tabs} />
