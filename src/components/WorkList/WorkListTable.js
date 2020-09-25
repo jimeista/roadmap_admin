@@ -7,7 +7,7 @@ import { CustomTable as Table } from '../../common'
 import {
   setWorkListTableColumnsHelper,
   setWorkListDataSourceHelper,
-} from '../../utils/helper'
+} from '../../utils/table_helper'
 
 export const WorkListTable = () => {
   const { organisations, categories, status, data } = useSelector(

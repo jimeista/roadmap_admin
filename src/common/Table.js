@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 
-import { putRoadMap } from '../features/roadmap/roadmapSlice'
+import { putRoadMap, deleteRoadMap } from '../features/roadmap/roadmapSlice'
 import { EditableCell } from './EditableCell'
 
 export const CustomTable = (props) => {
@@ -109,12 +109,12 @@ export const CustomTable = (props) => {
   }
 
   const handleDelete = async (record) => {
-    // try {
-    //   let newData = [...props.data]
-    //   props.setDataSource(newData.filter((item) => item.key !== record.key))
-    // } catch (errInfo) {
-    //   console.log('Validate Failed:', errInfo)
-    // }
+    try {
+      console.log(record)
+      dispatch(deleteRoadMap(record.id))
+    } catch (errInfo) {
+      console.log('Validate Failed:', errInfo)
+    }
   }
 
   const mergedColumns = arr.map((col) => {

@@ -7,7 +7,7 @@ import { CustomTable as Table } from '../../common'
 import {
   setCrossListTableColumnsHelper,
   setCrossListDataSourceHelper,
-} from '../../utils/helper'
+} from '../../utils/table_helper'
 
 export const CrossListTable = () => {
   const { categories, intersections, data, status } = useSelector(

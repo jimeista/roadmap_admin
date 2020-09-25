@@ -71,6 +71,14 @@ export const putRoadMap = createAsyncThunk(
   }
 )
 
+export const deleteRoadMap = createAsyncThunk(
+  'roadmap/deleteRoadMap',
+  async (dataId) => {
+    await axios.delete(`${BASE_ROADMAP_URL}/${dataId}`)
+    return { id: dataId }
+  }
+)
+
 export const roadmapSlice = createSlice({
   name: 'roadmap',
   initialState: {
@@ -196,6 +204,13 @@ export const roadmapSlice = createSlice({
     },
     [putRoadMap.pending]: (state, action) => {
       state.status = 'loading'
+    },
+    [deleteRoadMap.pending]: (state) => {
+      state.status = 'loading'
+    },
+    [deleteRoadMap.fulfilled]: (state, action) => {
+      state.status = 'success'
+      state.data = state.data.filter((i) => i.id !== action.payload.id)
     },
   },
 })
