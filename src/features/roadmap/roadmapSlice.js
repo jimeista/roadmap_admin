@@ -51,7 +51,8 @@ export const postRoadMap = createAsyncThunk(
   'roadmap/postRoadMap',
   async (initialPost) => {
     const res = await axios.post(BASE_ROADMAP_URL, initialPost)
-    return JSON.parse(res.config.data)
+
+    return { data: JSON.parse(res.config.data), id: res.data }
   }
 )
 
@@ -59,6 +60,7 @@ export const postIntersections = createAsyncThunk(
   'roadmap/postIntersections',
   async (initialPost) => {
     const res = await axios.post(BASE_INTERSECTIONS_URL, initialPost)
+    console.log(res)
     return JSON.parse(res.config.data)
   }
 )
@@ -178,17 +180,18 @@ export const roadmapSlice = createSlice({
     },
     [postRoadMap.fulfilled]: (state, action) => {
       state.status = 'success'
-      let ob = action.payload
+      let ob = action.payload.data
+      const id = action.payload.id
       const category = state.categories.data.find(
-        (i) => i.id === action.payload.category
+        (i) => i.id === action.payload.data.category
       ).name
       const region = state.regions.data.find(
-        (i) => i.id === action.payload.region
+        (i) => i.id === action.payload.data.region
       ).name
       const organisation = state.organisations.data.find(
-        (i) => i.id === action.payload.organisation
+        (i) => i.id === action.payload.data.organisation
       ).name
-      ob = { ...ob, category, region, organisation }
+      ob = { ...ob, category, region, organisation, id }
       state.data = [ob, ...state.data]
     },
     [postRoadMap.pending]: (state) => {

@@ -2,7 +2,9 @@ import React from 'react'
 import { Modal, Button } from 'antd'
 
 export const CrossDetailsModal = (props) => {
-  const { visible, setVisible, record } = props
+  const { visible, setVisible, record, data } = props
+
+  console.log(record)
 
   return (
     <Modal

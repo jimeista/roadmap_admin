@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 
-import { putRoadMap, deleteRoadMap } from '../features/roadmap/roadmapSlice'
+import { deleteRoadMap } from '../features/roadmap/roadmapSlice'
 import { EditableCell } from './EditableCell'
 
 export const CustomTable = (props) => {
@@ -29,7 +29,7 @@ export const CustomTable = (props) => {
         return editable ? (
           <span>
             <a
-              onClick={() => save(record)}
+              onClick={() => props.save(record, setEditingKey, form)}
               style={{
                 marginRight: 8,
               }}
@@ -86,31 +86,8 @@ export const CustomTable = (props) => {
     setEditingKey('')
   }
 
-  const save = async (record) => {
-    try {
-      const row = await form.validateFields()
-      setEditingKey('')
-      dispatch(putRoadMap({ status: row, id: record.id }))
-      // const newData = [...props.dataSource]
-      // const index = newData.findIndex((item) => key === item.key)
-      // if (index > -1) {
-      //   const item = newData[index]
-      //   newData.splice(index, 1, { ...item, ...row })
-      //   props.setDataSource(newData)
-      //   setEditingKey('')
-      // } else {
-      //   newData.push(row)
-      //   props.setDataSource(newData)
-      //   setEditingKey('')
-      // }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo)
-    }
-  }
-
   const handleDelete = async (record) => {
     try {
-      console.log(record)
       dispatch(deleteRoadMap(record.id))
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo)

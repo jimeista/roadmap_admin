@@ -42,6 +42,7 @@ export const CrossListTable = () => {
             visible={visible}
             setVisible={setVisible}
             record={record}
+            data={data}
           />
         </Form.Item>
       )}

@@ -179,16 +179,18 @@ export const setCrossListTableColumnsHelper = (
       title: 'Улица',
       dataIndex: 'address',
       key: 'address',
-      render: (text, record) => (
-        <a
-          onClick={() => {
-            setRecord(record)
-            setVisible(true)
-          }}
-        >
-          {text}
-        </a>
-      ),
+      render: (text, record) => {
+        return (
+          <a
+            onClick={() => {
+              setRecord(record)
+              setVisible(true)
+            }}
+          >
+            {text}
+          </a>
+        )
+      },
     },
     {
       title: 'Категория работ',
