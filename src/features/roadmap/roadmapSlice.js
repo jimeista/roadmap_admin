@@ -119,8 +119,7 @@ export const roadmapSlice = createSlice({
       state.current = action.payload
     },
     setMapData: (state, action) => {
-      console.log(action.payload)
-      // state.mapData = [...state.mapData, ...action.payload]
+      state.mapData = [...state.mapData, action.payload]
     },
   },
   extraReducers: {
