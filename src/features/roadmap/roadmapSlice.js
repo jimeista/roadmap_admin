@@ -6,6 +6,7 @@ const BASE_REGIONS_URL = 'sc-roadworks/api/regions'
 const BASE_CATEGORIES_URL = 'sc-roadworks/api/categories'
 const BASE_ROADMAP_URL = 'sc-roadworks/api/roadworks'
 const BASE_INTERSECTIONS_URL = 'sc-roadworks/api/intersections'
+const BASE_GEOMETRIES_URL = 'rest-api/post-roadwork-geometries.json'
 
 export const fecthOrganizations = createAsyncThunk(
   'roadmap/fetchOrganizations',
@@ -62,6 +63,14 @@ export const postIntersections = createAsyncThunk(
     const res = await axios.post(BASE_INTERSECTIONS_URL, initialPost)
     console.log(res)
     return JSON.parse(res.config.data)
+  }
+)
+
+export const postGeometries = createAsyncThunk(
+  'roadmap/postGeometries',
+  async (geometries) => {
+    const res = await axios.post(BASE_GEOMETRIES_URL, geometries)
+    console.log(res)
   }
 )
 

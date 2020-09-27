@@ -78,3 +78,45 @@ export const renderButtons = (active, setActive) => {
     </div>
   )
 }
+
+export const createGeoObject = (active, draw) => {
+  const options = {
+    editorDrawingCursor: 'crosshair',
+    editorMaxPoints: 10,
+    fillColor: '#00FF00',
+    strokeColor: '#0000FF',
+    strokeWidth: 5,
+  }
+
+  if (active === 'placemark') {
+    return (
+      <Placemark
+        instanceRef={(ref) => ref && draw(ref, active)}
+        geometry={[]}
+        draggable={true}
+      />
+    )
+  }
+
+  if (active === 'polygon') {
+    return (
+      <Polygon
+        instanceRef={(ref) => ref && draw(ref, active)}
+        geometry={[]}
+        options={options}
+      />
+    )
+  }
+
+  if (active === 'polyline') {
+    return (
+      <Polyline
+        instanceRef={(ref) => ref && draw(ref, active)}
+        geometry={[]}
+        options={options}
+      />
+    )
+  }
+
+  return null
+}

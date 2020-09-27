@@ -3,7 +3,11 @@ import { YMaps, Map, Polyline, Placemark, Polygon } from 'react-yandex-maps'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { setMapData } from '../features/roadmap/roadmapSlice'
-import { renderButtons, renderPolygons } from '../utils/yandex_helper'
+import {
+  renderButtons,
+  renderPolygons,
+  createGeoObject,
+} from '../utils/yandex_helper'
 import { usePrevious } from '../utils/usePrevious'
 
 const mapState = {
@@ -70,46 +74,4 @@ export const CustomYandexMap = () => {
       </YMaps>
     </React.Fragment>
   )
-}
-
-const createGeoObject = (active, draw) => {
-  const options = {
-    editorDrawingCursor: 'crosshair',
-    editorMaxPoints: 10,
-    fillColor: '#00FF00',
-    strokeColor: '#0000FF',
-    strokeWidth: 5,
-  }
-
-  if (active === 'placemark') {
-    return (
-      <Placemark
-        instanceRef={(ref) => ref && draw(ref, active)}
-        geometry={[]}
-        draggable={true}
-      />
-    )
-  }
-
-  if (active === 'polygon') {
-    return (
-      <Polygon
-        instanceRef={(ref) => ref && draw(ref, active)}
-        geometry={[]}
-        options={options}
-      />
-    )
-  }
-
-  if (active === 'polyline') {
-    return (
-      <Polyline
-        instanceRef={(ref) => ref && draw(ref, active)}
-        geometry={[]}
-        options={options}
-      />
-    )
-  }
-
-  return null
 }

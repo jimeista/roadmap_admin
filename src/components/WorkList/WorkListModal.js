@@ -6,7 +6,7 @@ import {
   formValidate,
   setCurrent,
   postRoadMap,
-  fetchRoadMap,
+  postGeometries,
 } from '../../features/roadmap/roadmapSlice'
 import {
   CustomSteps as Steps,
@@ -30,6 +30,7 @@ export const WorkListModal = () => {
     formData,
     current,
     status,
+    mapData,
   } = useSelector((state) => state.roadmap)
 
   const steps = setSteps(organisations, regions, categories, formData)
@@ -38,6 +39,23 @@ export const WorkListModal = () => {
     try {
       let ob = postNewRoadWork(data, categories, organisations, regions)
       dispatch(postRoadMap(ob))
+
+      const geometries = {
+        geometries: mapData.map((i) => {
+          let arr = []
+          if (i.type === 'polyline') {
+            arr = i.coordinates.map((ii) => ({ x: ii[1], y: ii[0] }))
+          } else if (i.type === 'polygon') {
+            arr = i.coordinates[0].map((k) => ({ x: k[1], y: k[0] }))
+          } else {
+            arr = [{ x: i.coordinates[1], y: i.coordinates[0] }]
+          }
+          return arr
+        }),
+      }
+
+      dispatch(postGeometries(geometries))
+
       status === 'success' && setVisible(false)
     } catch (err) {
       console.log(err.message)
