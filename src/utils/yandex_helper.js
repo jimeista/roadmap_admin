@@ -51,14 +51,18 @@ export const renderButtons = (active, setActive) => {
       <Button
         type={active === 'polyline' && 'primary'}
         style={{ margin: 15, marginLeft: 0 }}
-        onClick={() => ('polyline' ? setActive('') : setActive('polyline'))}
+        onClick={() =>
+          active === 'polyline' ? setActive('') : setActive('polyline')
+        }
       >
         Добавить линию
       </Button>
       <Button
         type={active === 'polygon' && 'primary'}
         style={{ margin: 10, marginLet: 0 }}
-        onClick={() => ('polygon' ? setActive('') : setActive('polygon'))}
+        onClick={() =>
+          active === 'polygon' ? setActive('') : setActive('polygon')
+        }
       >
         Добавить квадрат
       </Button>
