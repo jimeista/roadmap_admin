@@ -35,7 +35,9 @@ export const CrossListModal = () => {
             type='primary'
             onClick={async () => {
               let data = await form.validateFields()
-              data = Object.values({ 'roadworks-ids': data })
+              const ob = Object.values(data)
+              const ids = ob.filter((i) => typeof i !== 'string')
+              data = { 'roadwork-ids': ids, 'intersection-area': data.area }
               dispatch(postIntersections(data))
               setVisible(false)
             }}

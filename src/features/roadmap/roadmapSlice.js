@@ -6,7 +6,6 @@ const BASE_REGIONS_URL = 'sc-roadworks/api/regions'
 const BASE_CATEGORIES_URL = 'sc-roadworks/api/categories'
 const BASE_ROADMAP_URL = 'sc-roadworks/api/roadworks'
 const BASE_INTERSECTIONS_URL = 'sc-roadworks/api/intersections'
-const BASE_GEOMETRIES_URL = 'rest-api/post-roadwork-geometries.json'
 
 export const fecthOrganizations = createAsyncThunk(
   'roadmap/fetchOrganizations',
@@ -50,27 +49,31 @@ export const fetchIntersections = createAsyncThunk(
 
 export const postRoadMap = createAsyncThunk(
   'roadmap/postRoadMap',
-  async (initialPost) => {
-    const res = await axios.post(BASE_ROADMAP_URL, initialPost)
+  async (ob) => {
+    const res = await axios.post(BASE_ROADMAP_URL, ob.data)
 
-    return { data: JSON.parse(res.config.data), id: res.data }
+    await axios.post(
+      `/sc-roadworks/api/roadworks/${res.data}/geometries`,
+      ob.geometries.coordinates
+    )
+
+    return {
+      data: JSON.parse(res.config.data),
+      id: res.data,
+      geometries: ob.geometries,
+    }
   }
 )
 
 export const postIntersections = createAsyncThunk(
   'roadmap/postIntersections',
   async (initialPost) => {
-    const res = await axios.post(BASE_INTERSECTIONS_URL, initialPost)
+    const res = await axios.post(
+      'rest-api/post-custom-intersection.json',
+      initialPost
+    )
     console.log(res)
     return JSON.parse(res.config.data)
-  }
-)
-
-export const postGeometries = createAsyncThunk(
-  'roadmap/postGeometries',
-  async (geometries) => {
-    const res = await axios.post(BASE_GEOMETRIES_URL, geometries)
-    console.log(res)
   }
 )
 
@@ -112,13 +115,14 @@ export const roadmapSlice = createSlice({
     status: 'idle',
     error: null,
     formData: {},
-    current: 0,
+    current: null,
     mapData: [],
     intersections: {
       status: 'idle',
       error: null,
       data: [],
     },
+    intersection: { type: 'Point', coordinates: [] },
   },
   reducers: {
     formValidate: (state, action) => {
@@ -129,6 +133,13 @@ export const roadmapSlice = createSlice({
     },
     setMapData: (state, action) => {
       state.mapData = [...state.mapData, ...action.payload]
+    },
+    setIntersection: (state, action) => {
+      state.intersection = action.payload
+    },
+    resetOnPost: (state) => {
+      state.mapData = []
+      state.formData = {}
     },
   },
   extraReducers: {
@@ -191,6 +202,7 @@ export const roadmapSlice = createSlice({
       state.status = 'success'
       let ob = action.payload.data
       const id = action.payload.id
+      const geometries = action.payload.geometries
       const category = state.categories.data.find(
         (i) => i.id === action.payload.data.category
       ).name
@@ -200,7 +212,7 @@ export const roadmapSlice = createSlice({
       const organisation = state.organisations.data.find(
         (i) => i.id === action.payload.data.organisation
       ).name
-      ob = { ...ob, category, region, organisation, id }
+      ob = { ...ob, category, region, organisation, id, geometries }
       state.data = [ob, ...state.data]
     },
     [postRoadMap.pending]: (state) => {
@@ -227,7 +239,13 @@ export const roadmapSlice = createSlice({
   },
 })
 
-export const { formValidate, setCurrent, setMapData } = roadmapSlice.actions
+export const {
+  formValidate,
+  setCurrent,
+  setMapData,
+  setIntersection,
+  resetOnPost,
+} = roadmapSlice.actions
 
 export const selectRoadMap = (state) => state.roadmap
 

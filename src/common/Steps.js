@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Steps, Button, Form } from 'antd'
 
@@ -8,6 +8,10 @@ export const CustomSteps = ({ steps, dispatch, setCurrent, formValidate }) => {
   const [form] = Form.useForm()
 
   const [current, setCurrentt] = useState(0)
+
+  useEffect(() => {
+    form.resetFields()
+  }, [form])
 
   const next = () => {
     setCurrentt((state) => state + 1)
@@ -22,6 +26,7 @@ export const CustomSteps = ({ steps, dispatch, setCurrent, formValidate }) => {
   const validate = async () => {
     try {
       const data = await form.validateFields()
+      console.log(data)
       Object.keys(data).map((key) => {
         if (typeof data[key] === 'object') {
           data[key] = data[key]['_i']

@@ -2,7 +2,7 @@ import React from 'react'
 import { Polygon, Polyline, Placemark } from 'react-yandex-maps'
 import { Button } from 'antd'
 
-export const renderPolygons = (polygons) => {
+export const renderGeoObject = (polygons) => {
   return polygons.map((el, index) => {
     switch (el.type) {
       case 'polyline':
@@ -31,14 +31,14 @@ export const renderPolygons = (polygons) => {
             }}
           />
         )
-      case 'placemark':
-        return (
-          <Placemark
-            key={index}
-            geometry={el.coordinates}
-            options={{ draggable: true }}
-          />
-        )
+      // case 'placemark':
+      //   return (
+      //     <Placemark
+      //       key={index}
+      //       geometry={el.coordinates}
+      //       options={{ draggable: true }}
+      //     />
+      //   )
       default:
         return null
     }
@@ -66,7 +66,7 @@ export const renderButtons = (active, setActive) => {
       >
         Добавить квадрат
       </Button>
-      <Button
+      {/* <Button
         type={active === 'placemark' && 'primary'}
         style={{ margin: 10, marginLet: 0 }}
         onClick={() =>
@@ -74,7 +74,7 @@ export const renderButtons = (active, setActive) => {
         }
       >
         Точка
-      </Button>
+      </Button> */}
     </div>
   )
 }
@@ -88,22 +88,22 @@ export const createGeoObject = (active, draw) => {
     strokeWidth: 5,
   }
 
-  if (active === 'placemark') {
-    return (
-      <Placemark
-        instanceRef={(ref) => ref && draw(ref, active)}
-        geometry={[]}
-        draggable={true}
-      />
-    )
-  }
+  // if (active === 'placemark') {
+  //   return (
+  //     <Placemark
+  //       instanceRef={(ref) => ref && draw(ref, active)}
+  //       geometry={[]}
+  //       draggable={true}
+  //     />
+  //   )
+  // }
 
   if (active === 'polygon') {
     return (
       <Polygon
         instanceRef={(ref) => ref && draw(ref, active)}
         geometry={[]}
-        options={options}
+        options={{ ...options, editorMaxPoints: 5 }}
       />
     )
   }
@@ -119,4 +119,12 @@ export const createGeoObject = (active, draw) => {
   }
 
   return null
+}
+
+export const renderIntersection = (ob) => {
+  return (
+    ob.type === 'Point' && (
+      <Placemark geometry={ob.coordinates} options={{ draggable: true }} />
+    )
+  )
 }

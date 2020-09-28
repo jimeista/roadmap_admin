@@ -6,7 +6,7 @@ import {
   formValidate,
   setCurrent,
   postRoadMap,
-  postGeometries,
+  resetOnPost,
 } from '../../features/roadmap/roadmapSlice'
 import {
   CustomSteps as Steps,
@@ -38,9 +38,8 @@ export const WorkListModal = () => {
   const postFormData = async (data) => {
     try {
       let ob = postNewRoadWork(data, categories, organisations, regions)
-      dispatch(postRoadMap(ob))
 
-      const geometries = {
+      const coordinates = {
         geometries: mapData.map((i) => {
           let arr = []
           if (i.type === 'polyline') {
@@ -54,7 +53,11 @@ export const WorkListModal = () => {
         }),
       }
 
-      dispatch(postGeometries(geometries))
+      ob = { data: ob, geometries: { coordinates } }
+
+      dispatch(postRoadMap(ob))
+      dispatch(setCurrent(null))
+      dispatch(resetOnPost())
 
       status === 'success' && setVisible(false)
     } catch (err) {
@@ -66,7 +69,10 @@ export const WorkListModal = () => {
     <>
       <Button
         type='primary'
-        onClick={() => setVisible(true)}
+        onClick={() => {
+          dispatch(setCurrent(0))
+          setVisible(true)
+        }}
         style={{ marginBottom: 10 }}
       >
         Добавить
@@ -75,11 +81,23 @@ export const WorkListModal = () => {
         <Modal
           title='Форма ввода данных по ремонтным работам'
           visible={visible}
-          onOk={() => setVisible(true)}
-          onCancel={() => setVisible(false)}
+          onOk={() => {
+            dispatch(setCurrent(null))
+            setVisible(false)
+          }}
+          onCancel={() => {
+            dispatch(setCurrent(null))
+            setVisible(false)
+          }}
           width={'80%'}
           footer={[
-            <Button key='back' onClick={() => setVisible(false)}>
+            <Button
+              key='back'
+              onClick={() => {
+                dispatch(setCurrent(null))
+                setVisible(false)
+              }}
+            >
               Отменить
             </Button>,
             <Button

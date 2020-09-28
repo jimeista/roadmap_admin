@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { YMaps, Map, Polyline, Placemark, Polygon } from 'react-yandex-maps'
+import { YMaps, Map } from 'react-yandex-maps'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { setMapData } from '../features/roadmap/roadmapSlice'
 import {
   renderButtons,
-  renderPolygons,
+  renderIntersection,
+  renderGeoObject,
   createGeoObject,
 } from '../utils/yandex_helper'
 import { usePrevious } from '../utils/usePrevious'
@@ -16,7 +17,9 @@ const mapState = {
 }
 
 export const CustomYandexMap = () => {
-  const { current, mapData } = useSelector((state) => state.roadmap)
+  const { current, mapData, intersection } = useSelector(
+    (state) => state.roadmap
+  )
   const dispatch = useDispatch()
 
   const [active, setActive] = useState('')
@@ -39,11 +42,15 @@ export const CustomYandexMap = () => {
       })
       ref.editor.events.add('drawingstop', (event) => {
         ref.editor.stopDrawing()
-        active === 'placemark' && setActive('')
       })
+
+      if (current !== 0) {
+        ref.editor.stopDrawing()
+        setActive('')
+      }
     }
     setGeoObject(createGeoObject(active, draw))
-  }, [active])
+  }, [active, current])
 
   useEffect(() => {
     if (previousState && previousState.active !== active) {
@@ -58,7 +65,7 @@ export const CustomYandexMap = () => {
   }, [active, polygons, previousState, dispatch])
 
   return (
-    <React.Fragment>
+    <>
       {current === 0 && renderButtons(active, setActive)}
       <YMaps style={{ minWidth: '100%' }}>
         <Map
@@ -69,9 +76,10 @@ export const CustomYandexMap = () => {
           modules={['geoObject.addon.editor']}
         >
           {geoObject}
-          {renderPolygons(mapData)}
+          {renderIntersection(intersection)}
+          {renderGeoObject(mapData)}
         </Map>
       </YMaps>
-    </React.Fragment>
+    </>
   )
 }

@@ -60,7 +60,7 @@ export const CustomTable = (props) => {
               title='Вы уверены что хотите удалить даныне?'
               onConfirm={() => handleDelete(record)}
             >
-              <a>
+              <a disabled={record.id ? false : true}>
                 <DeleteOutlined
                   className='icon_edit_btn_style'
                   title='Удалить'
